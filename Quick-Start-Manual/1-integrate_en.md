@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             TTAdConfig.Builder()
                 // Please use your own appId, this is for demo
                 .appId("5081617")
+                .appName(packageName)
                 // The default setting is SurfaceView.
                 // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
                 //.useTextureView(true)

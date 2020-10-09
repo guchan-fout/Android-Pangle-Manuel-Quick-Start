@@ -18,7 +18,6 @@
             android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
             android:authorities="${applicationId}.TTMultiProvider"
             android:exported="false" />
-        s
         <activity
             android:name=".NativeAdsViewActivity"
             android:label="@string/title_activity_native_ads_view"
