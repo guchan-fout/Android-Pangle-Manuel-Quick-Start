@@ -9,20 +9,19 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:text="TextView"
-        tools:layout_editor_absoluteX="92dp"
+        app:layout_constraintStart_toEndOf="@+id/logoView"
         tools:layout_editor_absoluteY="21dp" />
 
-    <View
+    <ImageView
         android:id="@+id/logoView"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +44,7 @@
         tools:layout_editor_absoluteX="5dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/descText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
