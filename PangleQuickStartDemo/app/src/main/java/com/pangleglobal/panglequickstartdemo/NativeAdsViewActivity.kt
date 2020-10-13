@@ -82,7 +82,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
             .setCodeId(mPlacementID)
             .setSupportDeepLink(true)
             .setAdCount(1)
-            .setImageAcceptedSize(369, 592)
+            .setImageAcceptedSize(300, 250)
             .build()
         mTTAdNative.loadFeedAd(adSlot, mFeedAdListener)
     }
@@ -98,8 +98,6 @@ class NativeAdsViewActivity : AppCompatActivity() {
                 return
             }
             for (nativeAd in ads) {
-                Timber.d(nativeAd.title)
-                Timber.d(nativeAd.description)
                 val content = CellContentModel()
                 content.isAd = true
                 content.feedAd = nativeAd

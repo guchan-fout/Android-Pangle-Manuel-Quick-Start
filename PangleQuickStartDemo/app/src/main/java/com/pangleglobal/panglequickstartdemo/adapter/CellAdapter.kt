@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import com.bytedance.sdk.openadsdk.TTNativeAd
 import com.pangleglobal.panglequickstartdemo.R
@@ -48,6 +49,10 @@ class CellAdapter(private val contentList: ArrayList<CellContentModel>) :
             holder.view.descText.text = ad.description
             holder.view.adButton.text = ad.buttonText
             Glide.with(holder.view).asBitmap().load(ad.icon.imageUrl).into(holder.view.logoView)
+
+            ad.imageMode == TTAdConstant.AD_TYPE_COMMON_VIDEO
+
+
             var videoAd = ad.adView
             if (videoAd != null) {
                 Timber.d("video ad")
@@ -62,6 +67,7 @@ class CellAdapter(private val contentList: ArrayList<CellContentModel>) :
 
             holder.view.adLogoView.setImageBitmap(ad.adLogo)
 
+            // register the view for click
             ad.registerViewForInteraction(holder.view as ViewGroup,holder.view.adButton, mTTNativeAdListener)
         }
     }
