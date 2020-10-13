@@ -1,6 +1,5 @@
 package com.pangleglobal.panglequickstartdemo.model
 
-import android.view.View
 import com.bytedance.sdk.openadsdk.TTFeedAd
 
 class CellContentModel {

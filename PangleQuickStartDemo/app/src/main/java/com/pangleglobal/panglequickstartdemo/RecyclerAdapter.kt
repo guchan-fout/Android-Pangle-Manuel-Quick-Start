@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recyclerview_item.view.*
 
-class RecyclerAdapter (private val customList: Array<String>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder>(){
+class RecyclerAdapter(private val customList: Array<String>) :
+    RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder>() {
 
     private lateinit var listener: OnItemClickListener
 
-    class RecyclerAdapterViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    class RecyclerAdapterViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapterViewHolder {
@@ -33,11 +34,11 @@ class RecyclerAdapter (private val customList: Array<String>) : RecyclerView.Ada
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, clickedText: String)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
 

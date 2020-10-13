@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val list = arrayOf("Origin Native", "Interstitial","Template Native Feed","Template Banner")
+        val list =
+            arrayOf("Origin Native", "Interstitial", "Template Native Feed", "Template Banner")
         val adapter =
             RecyclerAdapter(list)
         val layoutManager = LinearLayoutManager(this)

@@ -4,17 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bytedance.sdk.openadsdk.AdSlot
-import com.bytedance.sdk.openadsdk.TTAdNative
+import com.bytedance.sdk.openadsdk.*
 import com.bytedance.sdk.openadsdk.TTAdNative.FeedAdListener
-import com.bytedance.sdk.openadsdk.TTAdSdk
-import com.bytedance.sdk.openadsdk.TTFeedAd
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import com.bytedance.sdk.openadsdk.TTAdNative.FullScreenVideoAdListener
 import com.pangleglobal.panglequickstartdemo.adapter.CellAdapter
 import com.pangleglobal.panglequickstartdemo.model.CellContentModel
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
+
 
 class NativeAdsViewActivity : AppCompatActivity() {
     private lateinit var mTTAdNative: TTAdNative
@@ -39,6 +36,38 @@ class NativeAdsViewActivity : AppCompatActivity() {
         requestOriginNativeAd("945538916")
     }
 
+    private lateinit var mTTFullScreenVideoAd: TTFullScreenVideoAd
+    private fun requestFullScreen() {
+        // 945541827
+        //init Pangle ad manager
+        //init Pangle ad manager
+        val mTTAdManager = TTAdSdk.getAdManager()
+        val mTTAdNative = mTTAdManager.createAdNative(this.applicationContext)
+
+        val adSlot = AdSlot.Builder()
+            .setCodeId("945541827")
+            .setSupportDeepLink(true)
+            .setImageAcceptedSize(1080, 1920)
+            .setOrientation(TTAdConstant.VERTICAL) //required parameter ，Set how you wish the video ad to be displayed ,choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
+            .build()
+
+        mTTAdNative.loadFullScreenVideoAd(adSlot, mTTFullScreenAdListener)
+    }
+
+    private val mTTFullScreenAdListener: FullScreenVideoAdListener =
+        object : FullScreenVideoAdListener {
+            override fun onError(i: Int, s: String) {
+                Timber.d("feedAdListener loaded fail .code=$i,message=$s")
+            }
+
+            override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
+                ttFullScreenVideoAd.showFullScreenVideoAd(this@NativeAdsViewActivity)
+            }
+
+            override fun onFullScreenVideoCached() {}
+        }
+
+
     private fun requestOriginNativeAd(mPlacementID: String) {
         Timber.d(mPlacementID)
         if (mPlacementID.isEmpty()) {
@@ -53,7 +82,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
             .setCodeId(mPlacementID)
             .setSupportDeepLink(true)
             .setAdCount(1)
-            .setImageAcceptedSize(300, 250)
+            .setImageAcceptedSize(369, 592)
             .build()
         mTTAdNative.loadFeedAd(adSlot, mFeedAdListener)
     }
@@ -74,7 +103,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
                 val content = CellContentModel()
                 content.isAd = true
                 content.feedAd = nativeAd
-                mContentlist.add(adPosition,content)
+                mContentlist.add(adPosition, content)
                 mAdapter.notifyItemInserted(adPosition)
             }
         }
