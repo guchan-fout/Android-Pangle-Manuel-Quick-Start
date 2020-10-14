@@ -1,5 +1,6 @@
 package com.pangleglobal.panglequickstartdemo.adapter
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bytedance.sdk.openadsdk.TTAdConstant
+import com.bytedance.sdk.openadsdk.TTAdDislike
+import com.bytedance.sdk.openadsdk.TTAdDislike.DislikeInteractionCallback
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import com.bytedance.sdk.openadsdk.TTNativeAd
 import com.pangleglobal.panglequickstartdemo.R
@@ -17,7 +20,7 @@ import kotlinx.android.synthetic.main.recyclerview_item.view.*
 import timber.log.Timber
 
 
-class CellAdapter(private val contentList: ArrayList<CellContentModel>) :
+class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel>) :
     RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -44,31 +47,50 @@ class CellAdapter(private val contentList: ArrayList<CellContentModel>) :
         if (getItemViewType(position) == TYPE_NORMAL) {
             holder.view.item_name.text = contentList[position].content
         } else {
+
+            /**
+             *  here is to set native ad's date to the view
+             */
             var ad: TTFeedAd = contentList[position].feedAd
             holder.view.titleText.text = ad.title
             holder.view.descText.text = ad.description
             holder.view.adButton.text = ad.buttonText
             Glide.with(holder.view).asBitmap().load(ad.icon.imageUrl).into(holder.view.logoView)
 
-            ad.imageMode == TTAdConstant.AD_TYPE_COMMON_VIDEO
-
-
-            var videoAd = ad.adView
-            if (videoAd != null) {
-                Timber.d("video ad")
-                holder.view.containerFrame.addView(ad.adView)
+            // this is video ad
+            if (ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_SQUARE || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL) {
+                var videoAd = ad.adView
+                if (videoAd != null) {
+                    Timber.d("video exist")
+                    holder.view.containerFrame.addView(ad.adView)
+                } else {
+                    Timber.d("video not exist")
+                    val imageView = ImageView(holder.view.context)
+                    Glide.with(holder.view).asBitmap().load(ad.imageList[0].imageUrl)
+                        .into(imageView)
+                    holder.view.containerFrame.addView(imageView)
+                }
             } else {
-                Timber.d("image ad")
+                // this is an image ad
                 val imageView = ImageView(holder.view.context)
-
                 Glide.with(holder.view).asBitmap().load(ad.imageList[0].imageUrl).into(imageView)
                 holder.view.containerFrame.addView(imageView)
             }
 
+            // Pangle logo view
             holder.view.adLogoView.setImageBitmap(ad.adLogo)
+            holder.view.adLogoView.bringToFront()
+
+            // set dislike button on top
+            holder.view.dislikeButton.bringToFront()
+            bindDislikeAction(ad, holder.view.dislikeButton, holder)
 
             // register the view for click
-            ad.registerViewForInteraction(holder.view as ViewGroup,holder.view.adButton, mTTNativeAdListener)
+            ad.registerViewForInteraction(
+                holder.view as ViewGroup,
+                holder.view.adButton,
+                mTTNativeAdListener
+            )
         }
     }
 
@@ -104,5 +126,25 @@ class CellAdapter(private val contentList: ArrayList<CellContentModel>) :
     companion object {
         private const val TYPE_NORMAL = 1
         private const val TYPE_AD = 2
+    }
+
+    private fun bindDislikeAction(
+        ad: TTNativeAd,
+        dislikeView: View,
+        holder: RecyclerAdapter.RecyclerAdapterViewHolder
+    ) {
+        val ttAdDislike: TTAdDislike = ad.getDislikeDialog(dislikeView.context as Activity)
+        ttAdDislike?.setDislikeInteractionCallback(object : DislikeInteractionCallback {
+            override fun onSelected(position: Int, value: String) {
+                // here to notify the recycleview to close the adapter
+                contentList.removeAt(holder.layoutPosition)
+                notifyDataSetChanged()
+            }
+
+            override fun onCancel() {
+                Timber.d("onCancel")
+            }
+        })
+        dislikeView.setOnClickListener { ttAdDislike?.showDislikeDialog() }
     }
 }

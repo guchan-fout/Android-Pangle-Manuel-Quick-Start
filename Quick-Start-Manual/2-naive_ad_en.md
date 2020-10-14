@@ -7,8 +7,8 @@
   * [Displaying Ads](#start/native_ad_origin_display)
 * [Template Native Ads](#start/native_ad_template)
   * [Loading Ads](#start/native_ad_template_load)
-  * [Determining load events](#start/native_ad_template_loadevent)
-  * [Displaying Ads](#start/native_ad_template_display)
+  * [Determining load events and Displaying Ads](#start/native_ad_template_loadevent)
+
 
 
 This chapter will explain the procedure for displaying the native ads in the application.
@@ -108,6 +108,8 @@ private val mFeedAdListener: FeedAdListener = object : FeedAdListener {
 if the parameter`imageMode` in the `nativeAd` is **TTAdConstant.IMAGE_MODE_VIDEO** or **TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL** or
 **TTAdConstant.IMAGE_MODE_VIDEO_SQUARE**, please set `adView` to display video for the ad.
 
+`TTAdDislike` is for getting user's feedback, please add a button on the ad's view to show `TTNativeAd.getDislikeDialog` to get the feedback.
+
 
 
 ```kotlin
@@ -118,34 +120,109 @@ override fun onBindViewHolder(
     if (getItemViewType(position) == TYPE_NORMAL) {
         holder.view.item_name.text = contentList[position].content
     } else {
+
+        /**
+         *  here is to set native ad's date to the view
+         */
         var ad: TTFeedAd = contentList[position].feedAd
         holder.view.titleText.text = ad.title
         holder.view.descText.text = ad.description
         holder.view.adButton.text = ad.buttonText
         Glide.with(holder.view).asBitmap().load(ad.icon.imageUrl).into(holder.view.logoView)
 
-        ad.imageMode == TTAdConstant.AD_TYPE_COMMON_VIDEO
-
-
-        var videoAd = ad.adView
-        if (videoAd != null) {
-            Timber.d("video ad")
-            holder.view.containerFrame.addView(ad.adView)
+        // this is video ad
+        if (ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_SQUARE || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL) {
+            var videoAd = ad.adView
+            if (videoAd != null) {
+                Timber.d("video exist")
+                holder.view.containerFrame.addView(ad.adView)
+            } else {
+                Timber.d("video not exist")
+                val imageView = ImageView(holder.view.context)
+                Glide.with(holder.view).asBitmap().load(ad.imageList[0].imageUrl)
+                    .into(imageView)
+                holder.view.containerFrame.addView(imageView)
+            }
         } else {
-            Timber.d("image ad")
+            // this is an image ad
             val imageView = ImageView(holder.view.context)
-
             Glide.with(holder.view).asBitmap().load(ad.imageList[0].imageUrl).into(imageView)
             holder.view.containerFrame.addView(imageView)
         }
 
+        // Pangle logo view
         holder.view.adLogoView.setImageBitmap(ad.adLogo)
+        holder.view.adLogoView.bringToFront()
+
+        // set dislike button on top
+        holder.view.dislikeButton.bringToFront()
+        bindDislikeAction(ad, holder.view.dislikeButton, holder)
 
         // register the view for click
-        ad.registerViewForInteraction(holder.view as ViewGroup,holder.view.adButton, mTTNativeAdListener)
+        ad.registerViewForInteraction(
+            holder.view as ViewGroup,
+            holder.view.adButton,
+            mTTNativeAdListener
+        )
     }
 }
+
+private val mTTNativeAdListener: TTNativeAd.AdInteractionListener =
+    object : TTNativeAd.AdInteractionListener {
+        override fun onAdClicked(p0: View?, p1: TTNativeAd?) {
+            Timber.d("onAdClicked")
+        }
+
+        override fun onAdCreativeClick(p0: View?, p1: TTNativeAd?) {
+            Timber.d("onAdCreativeClick")
+        }
+
+        override fun onAdShow(p0: TTNativeAd?) {
+            Timber.d("onAdShow")
+        }
+
+    }
+
+override fun getItemCount(): Int {
+    return contentList.size
+}
+
+override fun getItemViewType(position: Int): Int {
+    return if (!contentList[position].isAd) {
+        TYPE_NORMAL
+    } else {
+        Timber.d("isAD!!")
+        TYPE_AD
+    }
+}
+
+companion object {
+    private const val TYPE_NORMAL = 1
+    private const val TYPE_AD = 2
+}
+
+private fun bindDislikeAction(
+    ad: TTNativeAd,
+    dislikeView: View,
+    holder: RecyclerAdapter.RecyclerAdapterViewHolder
+) {
+    val ttAdDislike: TTAdDislike = ad.getDislikeDialog(dislikeView.context as Activity)
+    ttAdDislike?.setDislikeInteractionCallback(object : DislikeInteractionCallback {
+        override fun onSelected(position: Int, value: String) {
+            // here to notify the recycleview to close the adapter
+            contentList.removeAt(holder.layoutPosition)
+            notifyDataSetChanged()
+        }
+
+        override fun onCancel() {
+            Timber.d("onCancel")
+        }
+    })
+    dislikeView.setOnClickListener { ttAdDislike?.showDislikeDialog() }
+}
 ```
+
+
 
 
 
@@ -159,84 +236,97 @@ On Pangle platform, create an **Template** ad in the app, you will get a **place
 
 <img src="pics/native_template.png" alt="drawing" width="200"/>
 
-In your application, create a `slot` for setting size and type for the ad and use `BUNativeExpressAdManager`'s
-`- (instancetype)initWithSlot:(BUAdSlot * _Nullable)slot adSize:(CGSize)size;`
-Set the size for the ad's view in function. SDK will return an same size's ad.
+In your application, create a `slot` and set the size by `setExpressViewAcceptedSize`, use `TTNativeAd`'s
+`void loadNativeExpressAd(AdSlot var1, @NonNull TTAdNative.NativeExpressAdListener var2);` to load the ad.
+SDK will return a same size's ad.
 
-```swift
+```kotlin
 /**
- for template native ad
- */
-var templateAdManager: BUNativeExpressAdManager!
+fun requestTemplateNativeAd(mPlacementID: String) {
+    Timber.d(mPlacementID)
+    if (mPlacementID.isEmpty()) {
+        Timber.e("PlacementId is null")
+        return
+    }
 
-//placementID : the ID when you created a placement
-//count: the counts you want to download,DO NOT set more than 3
-func requestTemplateNativeAds(placementID:String, count:Int) {
-    let slot = BUAdSlot.init()
-    slot.id = placementID
-    slot.adType = BUAdSlotAdType.feed
-    slot.position = BUAdSlotPosition.feed
-    slot.imgSize = BUSize.init()
-    slot.isSupportDeepLink = true
-    // Please set your ad view's size here
-    let adViewWidth = 300
-    let adViewHeight = 250
-    templateAdManager = BUNativeExpressAdManager.init(slot: slot, adSize: CGSize(width: adViewWidth, height: adViewHeight))
-    templateAdManager.delegate = self
-    templateAdManager.loadAd(count)
+    //init Pangle ad manager
+    val mTTAdManager = TTAdSdk.getAdManager()
+    val mTTAdNative = mTTAdManager.createAdNative(this)
+    val adSlot = AdSlot.Builder()
+        .setCodeId(mPlacementID)
+        .setSupportDeepLink(true)
+        .setAdCount(1)
+        .setExpressViewAcceptedSize(300F, 250F)
+        .build()
+    mTTAdNative.loadNativeExpressAd(adSlot, mTTNativeExpressAdListener)
 }
 ```
 
 
 <a name="start/native_ad_template_loadevent"></a>
-## Determining load events
+## Determining load events and Displaying Ads
 
-`BUNativeExpressAdViewDelegate` indicates the result of ad's load. If ad is loaded,
-**must call `render()` for rending the ad.**
+`NativeExpressAdListener` indicates the result of ad's load. If ad is loaded, **must call `render()` for rending the ad.**
 
-```swift
-// MARK:  BUNativeExpressAdViewDelegate
-extension YourNativeAdsViewController: BUNativeExpressAdViewDelegate {
-    func nativeExpressAdSuccess(toLoad nativeExpressAd: BUNativeExpressAdManager, views: [BUNativeExpressAdView]) {
-        for templateAdView in views {
-            // set rootViewController for ad's showing
-            templateAdView.rootViewController = self
-            templateAdView.render()
+The result of render will be indicated by `ExpressAdInteractionListener`, ad's view will be passed in `onRenderSuccess`.
+
+```kotlin
+private val mTTNativeExpressAdListener: NativeExpressAdListener =
+    object : NativeExpressAdListener {
+        override fun onError(code: Int, message: String) {
+            Timber.d("NativeExpressAdListener loaded fail .code=$code,message=$message")
+        }
+
+        override fun onNativeExpressAdLoad(ads: List<TTNativeExpressAd>) {
+            if (ads == null || ads.isEmpty()) {
+                return
+            }
+            mTTNativeExpressAd = ads[0]
+            mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
+            mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
+            bindDislike(mTTNativeExpressAd)
+            mTTNativeExpressAd.render()
         }
     }
 
-    func nativeExpressAdFail(toLoad nativeExpressAd: BUNativeExpressAdManager, error: Error?) {
-        print("\(#function)  load template failed with error: \(String(describing: error?.localizedDescription))")
+private val mExpressAdInteractionListener: ExpressAdInteractionListener =
+    object : ExpressAdInteractionListener {
+        override fun onAdClicked(view: View, type: Int) {
+            Timber.d("onAdClicked")
+        }
+
+        override fun onAdShow(view: View, type: Int) {
+            Timber.d("onAdShow")
+        }
+
+        override fun onRenderFail(view: View, msg: String, code: Int) {
+            Timber.d("onRenderFail .code=$code,message=$msg")
+        }
+
+        override fun onRenderSuccess(view: View, width: Float, height: Float) {
+            Timber.d("onRenderSuccess")
+            val content = CellContentModel()
+            content.isAd = true
+            content.templateAd = view
+            mContentlist.add(adPosition,content)
+            mAdapter.notifyItemInserted(adPosition)
+
+        }
     }
-}
 ```
 
-<a name="start/native_ad_template_display"></a>
-## Displaying Ads
+Please implement `TTNativeExpressAd` 's `void setDislikeCallback(Activity var1, DislikeInteractionCallback var2);` when user click the `dislike` button to get user's feedback. You can remove the ad's view after the user choose one reason why he doesn't like the ad.
 
-If `render()` succeed, ad will be sent to `BUNativeExpressAdViewDelegate`'s `- (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView;`.
+```kotlin
+private fun bindDislike(ad: TTNativeExpressAd) {
+    ad.setDislikeCallback(this, object : DislikeInteractionCallback {
+        override fun onSelected(position: Int, value: String) {
+            Timber.d("onSelected")
+            mContentlist.removeAt(adPosition)
+            mAdapter.notifyDataSetChanged()
+        }
 
-**Please set `rootViewController` for enabling ad's action.**
-
-If user clicked close button and choose the reason, `func nativeExpressAdView(_ nativeExpressAdView: BUNativeExpressAdView, dislikeWithReason filterWords: [BUDislikeWords])` will be called.
-
-
-```swift
-// MARK:  BUNativeExpressAdViewDelegate
-extension YourNativeAdsViewController: BUNativeExpressAdViewDelegate {
-    func nativeExpressAdViewRenderSuccess(_ nativeExpressAdView: BUNativeExpressAdView) {
-        // here to add nativeExpressAdView for displaying
-        contents.insert(nativeExpressAdView, at: adPosition)
-        nativeExpressAdView.rootViewController = self
-        self.tableView.reloadData()
-    }
-
-    func nativeExpressAdViewRenderFail(_ nativeExpressAdView: BUNativeExpressAdView, error: Error?) {
-        print("\(#function)  render failed with error: \(String(describing: error?.localizedDescription))")
-    }
-
-    func nativeExpressAdView(_ nativeExpressAdView: BUNativeExpressAdView, dislikeWithReason filterWords: [BUDislikeWords]) {
-    // do the action (e.g. remove the ad) if ad's dislike reason is been clicked
-    }
+        override fun onCancel() {}
+    })
 }
 ```

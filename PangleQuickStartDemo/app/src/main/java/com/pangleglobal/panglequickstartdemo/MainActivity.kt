@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val list =
-            arrayOf("Origin Native", "Interstitial", "Template Native Feed", "Template Banner")
+            arrayOf("Origin Native", "Template Native", "Template Native Feed", "Template Banner")
         val adapter =
             RecyclerAdapter(list)
         val layoutManager = LinearLayoutManager(this)
@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     1 -> {
-                        //val intent = Intent(this@MainActivity, NativeAdActivity::class.java)
-                        //startActivity(intent)
+                        val intent = Intent(this@MainActivity, TemplateNativeAdsViewActivity::class.java)
+                        startActivity(intent)
                     }
                     2 -> {
                         //val intent = Intent(this@MainActivity, FullScreenVideoActivity::class.java)

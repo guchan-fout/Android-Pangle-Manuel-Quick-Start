@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bytedance.sdk.openadsdk.*
 import com.bytedance.sdk.openadsdk.TTAdNative.FeedAdListener
 import com.bytedance.sdk.openadsdk.TTAdNative.FullScreenVideoAdListener
-import com.pangleglobal.panglequickstartdemo.adapter.CellAdapter
+import com.pangleglobal.panglequickstartdemo.adapter.OriginNativeAdsAdapter
 import com.pangleglobal.panglequickstartdemo.model.CellContentModel
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -16,7 +16,7 @@ import timber.log.Timber
 class NativeAdsViewActivity : AppCompatActivity() {
     private lateinit var mTTAdNative: TTAdNative
     private lateinit var mContentlist: ArrayList<CellContentModel>
-    private lateinit var mAdapter: CellAdapter
+    private lateinit var mAdapter: OriginNativeAdsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     val adPosition = 2
@@ -26,7 +26,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mContentlist = initList()
         mAdapter =
-            CellAdapter(mContentlist)
+            OriginNativeAdsAdapter(mContentlist)
         viewManager = LinearLayoutManager(this)
 
         recycler_view.layoutManager = viewManager
