@@ -28,26 +28,33 @@ Please set the ad's `Orientation` to fit for the app.
 <img src="pics/reward_video_set.png" alt="drawing" width="300"/>
 
 
-In your application, create a `BURewardedVideoModel` for setting userId and use `BURewardedVideoAd` to load ads.
-`userId` can be random if not needed.
+In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadRewardVideoAd(AdSlot var1, @NonNull TTAdNative.RewardVideoAdListener var2);` to load the ad.
 
-```swift
-class YourRewardedVideoAdsViewController: UIViewController {
+```kotlin
+fun requestRewardedVideoAd(mPlacementID: String) {
+    Timber.d(mPlacementID)
+    if (mPlacementID.isEmpty()) {
+        Timber.e("PlacementId is null")
+        return
+    }
 
-  ...
+    //init Pangle ad manager
+    val mTTAdManager = TTAdSdk.getAdManager()
+    val mTTAdNative = mTTAdManager.createAdNative(this)
+    val adSlot = AdSlot.Builder()
+        .setCodeId(mPlacementID)
+        .setSupportDeepLink(true)
+        .setImageAcceptedSize(1080, 1920) //Set size to fit your ad slot size
+        .setRewardName("your reward's name") //Parameter for rewarded video ad requests, name of the reward
+        .setRewardAmount(1) // The number of rewards in rewarded video ad
+        .setUserID("your app user id") //User ID, a required parameter for rewarded video ads
+        .setMediaExtra("media_extra") //optional parameter
+        .setOrientation(TTAdConstant.VERTICAL) //Set how you wish the video ad to be displayed, choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
+        .build()
 
-  var rewardedVideo: BURewardedVideoAd!
-
-  //placementID : the ID when you created a placement
-  func requestRewardedVideoAd(placementID: String) {
-      print("aasdfasef")
-      let rewardModel = BURewardedVideoModel.init()
-      rewardModel.userId = "Your app's user id"
-
-      rewardedVideo = BURewardedVideoAd.init(slotID: placementID, rewardedVideoModel: rewardModel)
-      rewardedVideo.delegate = self
-      rewardedVideo.loadData()
-  }
+    //load ad
+    mTTAdNative.loadRewardVideoAd(adSlot, mRewardedAdListener)
+}
 
   ...
 
@@ -56,26 +63,18 @@ class YourRewardedVideoAdsViewController: UIViewController {
 <a name="start/reward_ad_loadevent"></a>
 ### Determining load events and displaying
 
-`BURewardedVideoAdDelegate` indicates the result of ad's load. If ad is loaded and `isAdValid`, call `- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController;` to display the ad.
+`RewardVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTRewardVideoAd`'s `void showRewardVideoAd(Activity var1);`' to display the ad.
 
-```swift
-// MARK: BURewardedVideoAdDelegate
-extension RewardedVideoViewController: BURewardedVideoAdDelegate {
-    func rewardedVideoAdDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
-        print("\(#function)")
-        if (rewardedVideoAd.isAdValid) {
-            rewardedVideoAd.show(fromRootViewController: self)
-        } else {
-            print("\(#function) rewardedVideoAd is unvalid ")
-        }
+```kotlin
+private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
+    override fun onError(i: Int, msg: String) {
+        Timber.d("RewardVideoAdListener loaded fail .code=$msg,message=$i")
     }
 
-    func rewardedVideoAdVideoDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
-        print("\(#function)")
+    override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
+        ttRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
     }
 
-    func rewardedVideoAd(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
-        print("\(#function)")
-    }
+    override fun onRewardVideoCached() {}
 }
 ```

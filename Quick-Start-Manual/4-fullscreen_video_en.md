@@ -3,7 +3,7 @@
 
 * [Full Screen Video Ads](#start/fullscreen_ad)
   * [Loading Ads](#start/fullscreen_load)
-  * [Determining load events](#start/fullscreen_loadevent)
+  * [Determining load events and Displaying the ad](#start/fullscreen_loadevent)
 
 
 This chapter will explain the procedure for displaying the full screen video ads in the application.
@@ -27,27 +27,35 @@ Please set the ad's `Orientation` to fit for the app.
 <img src="pics/fullscreen_set.png" alt="drawing" width="300"/>
 
 
-In your application, create a `BUFullscreenVideoAd` to load ads.
+In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadFullScreenVideoAd(AdSlot var1, @NonNull TTAdNative.FullScreenVideoAdListener var2);` to load the ad.
 
 
-```swift
-class FullScreenVideoViewController: UIViewController {
+```kotlin
+class FullScreenVideoAdsActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ...
 
-    ....
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        requestFullScreenVideoAd(placementID: "your placement id")
+        requestFullScreenVideoAd("945277276")
     }
 
-    var fullscreenVideoAd: BUFullscreenVideoAd!
+    private fun requestFullScreenVideoAd(mPlacementID: String) {
 
-    func requestFullScreenVideoAd(placementID: String) {
-        fullscreenVideoAd = BUFullscreenVideoAd.init(slotID: placementID)
-        fullscreenVideoAd.delegate = self
-        fullscreenVideoAd.loadData()
+        if (mPlacementID.isEmpty()) {
+            Timber.e("PlacementId is null")
+            return
+        }
+
+        //init Pangle ad manager
+        val mTTAdManager = TTAdSdk.getAdManager()
+        val mTTAdNative = mTTAdManager.createAdNative(this)
+        val adSlot = AdSlot.Builder()
+            .setCodeId(mPlacementID)
+            .setSupportDeepLink(true)
+            .setImageAcceptedSize(1080, 1920)
+            .setOrientation(TTAdConstant.VERTICAL) //required parameter ，Set how you wish the video ad to be displayed ,choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
+            .build()
+        mTTAdNative.loadFullScreenVideoAd(adSlot, mTTFullScreenAdListener)
     }
 
     ...
@@ -56,22 +64,21 @@ class FullScreenVideoViewController: UIViewController {
 ```
 
 <a name="start/fullscreen_loadevent"></a>
-### Determining load events and displaying
+### Determining load events and Displaying
 
-`BUFullscreenVideoAdDelegate` indicates the result of ad's load. If ad is loaded and `isAdValid`, call `- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController;` to display the ad.
+`FullScreenVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTFullScreenVideoAd`'s `void showFullScreenVideoAd(Activity var1);`' to display the ad.
 
-```swift
-// MARK: BUFullscreenVideoAdDelegate
-extension FullScreenVideoViewController: BUFullscreenVideoAdDelegate{
-
-    func fullscreenVideoMaterialMetaAdDidLoad(_ fullscreenVideoAd: BUFullscreenVideoAd) {
-        if (fullscreenVideoAd.isAdValid) {
-            fullscreenVideoAd.show(fromRootViewController: self)
+```kotlin
+private val mTTFullScreenAdListener: FullScreenVideoAdListener =
+    object : FullScreenVideoAdListener {
+        override fun onError(i: Int, s: String) {
+            Timber.d("NativeExpressAdListener loaded fail .code=$s,message=$i")
         }
-    }
 
-    func fullscreenVideoAd(_ fullscreenVideoAd: BUFullscreenVideoAd, didFailWithError error: Error?) {
-        print("\(#function) failed wiht \(String(describing: error?.localizedDescription))")
+        override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
+            ttFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+        }
+
+        override fun onFullScreenVideoCached() {}
     }
-}
 ```

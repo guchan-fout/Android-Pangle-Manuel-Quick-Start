@@ -6,11 +6,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bytedance.sdk.openadsdk.TTAdConfig
+import com.bytedance.sdk.openadsdk.TTAdManager
 import com.bytedance.sdk.openadsdk.TTAdSdk
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mTTAdManager: TTAdManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             Timber.plant(Timber.DebugTree())
         }
 
-        TTAdSdk.init(
+        mTTAdManager = TTAdSdk.init(
             this,
             TTAdConfig.Builder()
                 // Please use your own appId, this is for demo
@@ -36,6 +39,11 @@ class MainActivity : AppCompatActivity() {
                 .setGDPR(0)
                 .build()
         )
+        if (!::mTTAdManager.isInitialized) {
+            // TTAdSdk.init has not been called yet ,please call it first
+        }
+
+
         if (BuildConfig.DEBUG) {
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             TTAdConfig.Builder().debug(true)
@@ -45,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val list =
-            arrayOf("Origin Native", "Template Native", "Template Native Feed", "Template Banner")
+            arrayOf("Origin Native", "Template Native", "Rewarded Video", "Full Screen Video")
         val adapter =
             RecyclerAdapter(list)
         val layoutManager = LinearLayoutManager(this)
@@ -63,20 +71,19 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     1 -> {
-                        val intent = Intent(this@MainActivity, TemplateNativeAdsViewActivity::class.java)
+                        val intent =
+                            Intent(this@MainActivity, TemplateNativeAdsViewActivity::class.java)
                         startActivity(intent)
                     }
                     2 -> {
-                        //val intent = Intent(this@MainActivity, FullScreenVideoActivity::class.java)
-                        //startActivity(intent)
+                        val intent =
+                            Intent(this@MainActivity, RewardedVideoAdsActivity::class.java)
+                        startActivity(intent)
                     }
                     3 -> {
-                        //val intent = Intent(this@MainActivity, TemplateNativeFeedAdActivity::class.java)
-                        //startActivity(intent)
-                    }
-                    4 -> {
-                        //val intent = Intent(this@MainActivity, TemplateBannerAdActivity::class.java)
-                        //startActivity(intent)
+                        val intent =
+                            Intent(this@MainActivity, FullScreenVideoAdsActivity::class.java)
+                        startActivity(intent)
                     }
                     else -> {
                     }

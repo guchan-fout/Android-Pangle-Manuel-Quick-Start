@@ -12,9 +12,13 @@ import kotlinx.android.synthetic.main.template_native_feed_ad.view.*
 import timber.log.Timber
 
 
-class TemplateNativeAdsContentAdapter(private val contentList: ArrayList<CellContentModel>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder>(){
+class TemplateNativeAdsContentAdapter(private val contentList: ArrayList<CellContentModel>) :
+    RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder>() {
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerAdapter.RecyclerAdapterViewHolder {
+    override fun onCreateViewHolder(
+        viewGroup: ViewGroup,
+        viewType: Int
+    ): RecyclerAdapter.RecyclerAdapterViewHolder {
         val view: View
         return if (viewType == TYPE_NORMAL) { // for call layout
             view = LayoutInflater.from(viewGroup.context)

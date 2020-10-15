@@ -1,8 +1,6 @@
 package com.pangleglobal.panglequickstartdemo
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,7 +75,6 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
                 }
                 mTTNativeExpressAd = ads[0]
                 mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
-                mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
                 bindDislike(mTTNativeExpressAd)
                 mTTNativeExpressAd.render()
             }
@@ -102,7 +99,7 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
                 val content = CellContentModel()
                 content.isAd = true
                 content.templateAd = view
-                mContentlist.add(adPosition,content)
+                mContentlist.add(adPosition, content)
                 mAdapter.notifyItemInserted(adPosition)
 
             }
