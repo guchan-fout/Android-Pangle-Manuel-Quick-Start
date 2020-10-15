@@ -79,7 +79,6 @@ class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel
 
             // Pangle logo view, will show privacy information if clicked
             holder.view.adLogoView.addView(ad.adLogoView)
-
             holder.view.adLogoView.bringToFront()
 
             // set dislike button on top
