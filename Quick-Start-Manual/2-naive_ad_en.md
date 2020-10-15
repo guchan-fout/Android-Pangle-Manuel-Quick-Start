@@ -241,7 +241,7 @@ In your application, create a `slot` and set the size by `setExpressViewAccepted
 SDK will return a same size's ad.
 
 ```kotlin
-/**
+
 fun requestTemplateNativeAd(mPlacementID: String) {
     Timber.d(mPlacementID)
     if (mPlacementID.isEmpty()) {
@@ -282,7 +282,6 @@ private val mTTNativeExpressAdListener: NativeExpressAdListener =
                 return
             }
             mTTNativeExpressAd = ads[0]
-            mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
             mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
             bindDislike(mTTNativeExpressAd)
             mTTNativeExpressAd.render()
