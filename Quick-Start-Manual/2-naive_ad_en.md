@@ -110,6 +110,8 @@ if the parameter`imageMode` in the `nativeAd` is **TTAdConstant.IMAGE_MODE_VIDEO
 
 `TTAdDislike` is for getting user's feedback, please add a button on the ad's view to show `TTNativeAd.getDislikeDialog` to get the feedback.
 
+Please add `TTNativeAd`'s `adLogoView` to the ad's view, this view will show the privacy information when been clicked.
+
 
 
 ```kotlin
