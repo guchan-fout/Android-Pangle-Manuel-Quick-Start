@@ -5,4 +5,4 @@
 3. [Rewarded Video Ads](Quick-Start-Manual/3-reward_video_en.md)
 4. [Full Screen Video Ads](Quick-Start-Manual/4-fullscreen_video_en.md)
 
-We also provide an [Demo app](PangleQuickStartDemo).
+We also provide a [Demo app](PangleQuickStartDemo).
