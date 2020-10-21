@@ -64,7 +64,7 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
 ```
 
-<a name="start/fullscreen_loadevent"></a>
+<a name="start/template_banner_ad_loadevent"></a>
 ### Determining load events and Displaying
 
 `NativeExpressAdListener` indicates the result of ad's load. If ad is loaded, please bind dislike to the `TTNativeExpressAd` for user's feedback to the ad, and call 'render()' to render the ad.
