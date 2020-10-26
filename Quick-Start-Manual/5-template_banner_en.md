@@ -32,16 +32,19 @@ In your application, create a `slot` and use `setExpressViewAcceptedSize` for se
 
 
 ```kotlin
-class FullScreenVideoAdsActivity : AppCompatActivity() {
+class TemplateBannerAdsActivity : AppCompatActivity() {
+
+    private lateinit var mTTTemplateBannerAd: TTNativeExpressAd
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ...
+        setContentView(R.layout.activity_template_banner_ads)
 
-        requestFullScreenVideoAd("945277276")
+        requestTemplateBannerAd("945557236")
     }
 
-    private fun requestFullScreenVideoAd(mPlacementID: String) {
-
+    fun requestTemplateBannerAd(mPlacementID: String) {
+        Timber.d(mPlacementID)
         if (mPlacementID.isEmpty()) {
             Timber.e("PlacementId is null")
             return
@@ -53,10 +56,10 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
         val adSlot = AdSlot.Builder()
             .setCodeId(mPlacementID)
             .setSupportDeepLink(true)
-            .setImageAcceptedSize(1080, 1920)
-            .setOrientation(TTAdConstant.VERTICAL) //required parameter ，Set how you wish the video ad to be displayed ,choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
+            .setAdCount(1)
+            .setExpressViewAcceptedSize(300F, 250F)
             .build()
-        mTTAdNative.loadFullScreenVideoAd(adSlot, mTTFullScreenAdListener)
+        mTTAdNative.loadBannerExpressAd(adSlot, mTTBannerNativeExpressAdListener)
     }
 
     ...
