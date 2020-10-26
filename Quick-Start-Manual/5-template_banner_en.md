@@ -2,6 +2,7 @@
 
 
 * [Template Banner Ads](#start/template_banner_ad)
+  * [Support SDK Verion](#start/template_banner_support_version)
   * [Loading Ads](#start/template_banner_ad_load)
   * [Determining load events and Displaying](#start/template_banner_ad_loadevent)
 
@@ -13,6 +14,11 @@ Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
 
 <a name="start/template_banner_ad"></a>
 ## Template Banner Ads
+
+<a name="start/template_banner_support_version"></a>
+### Support SDK Verion
+Please Use the following sdk for template banner
+ - Pangle Android 3.1.7.0 or later
 
 <a name="start/template_banner_ad_load"></a>
 ### Loading Ads
