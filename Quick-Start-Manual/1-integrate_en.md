@@ -33,11 +33,13 @@ allprojects {
 ```
 
 Next, open the app-level `build.gradle` file for your app, add `implementation 'com.bytedance.sdk:pangle-sdk:x.x.x.x'` in "dependencies" section.
+In order to use the Android Advertising ID, we also recommend add  `com.google.android.gms:play-services-ads-identifier`.
 
 ```gradle
 dependencies {
     ...
     implementation 'com.bytedance.sdk:pangle-sdk:3.1.5.3'
+    implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     ...
 
 }
