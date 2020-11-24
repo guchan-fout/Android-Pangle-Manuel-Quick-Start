@@ -63,18 +63,22 @@ fun requestRewardedVideoAd(mPlacementID: String) {
 <a name="start/reward_ad_loadevent"></a>
 ### Determining load events and displaying
 
-`RewardVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTRewardVideoAd`'s `void showRewardVideoAd(Activity var1);`' to display the ad.
+`RewardVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTRewardVideoAd`'s `void showRewardVideoAd(Activity var1);`' to display the ad. We recommend to the show ad in `onRewardVideoCached()`.
 
 ```kotlin
+private lateinit var mRewardVideoAd: TTRewardVideoAd
+
 private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
     override fun onError(i: Int, msg: String) {
         Timber.d("RewardVideoAdListener loaded fail .code=$msg,message=$i")
     }
 
     override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
-        ttRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
+        mRewardVideoAd = ttRewardVideoAd
     }
 
-    override fun onRewardVideoCached() {}
+    override fun onRewardVideoCached() {
+        mRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
+    }
 }
 ```

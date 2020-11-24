@@ -66,9 +66,11 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 <a name="start/fullscreen_loadevent"></a>
 ### Determining load events and Displaying
 
-`FullScreenVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTFullScreenVideoAd`'s `void showFullScreenVideoAd(Activity var1);`' to display the ad.
+`FullScreenVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTFullScreenVideoAd`'s `void showFullScreenVideoAd(Activity var1);`' to display the ad. We recommend to show the ad in `onFullScreenVideoCached()`.
 
 ```kotlin
+private lateinit var mFullScreenVideoAd: TTFullScreenVideoAd
+
 private val mTTFullScreenAdListener: FullScreenVideoAdListener =
     object : FullScreenVideoAdListener {
         override fun onError(i: Int, s: String) {
@@ -76,9 +78,11 @@ private val mTTFullScreenAdListener: FullScreenVideoAdListener =
         }
 
         override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
-            ttFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+            mFullScreenVideoAd = ttFullScreenVideoAd
         }
 
-        override fun onFullScreenVideoCached() {}
+        override fun onFullScreenVideoCached() {
+            mFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+        }
     }
 ```
