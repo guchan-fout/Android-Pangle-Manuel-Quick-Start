@@ -23,7 +23,7 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
 
     lateinit var mContentlist: ArrayList<CellContentModel>
 
-    private lateinit var mTTNativeExpressAd: TTNativeExpressAd
+    private var mTTNativeExpressAd: TTNativeExpressAd? = null
 
     val adPosition = 2
 
@@ -74,9 +74,11 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
                     return
                 }
                 mTTNativeExpressAd = ads[0]
-                mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
-                bindDislike(mTTNativeExpressAd)
-                mTTNativeExpressAd.render()
+                mTTNativeExpressAd?.let {
+                    it.setExpressInteractionListener(mExpressAdInteractionListener)
+                    bindDislike(it)
+                    it.render()
+                }
             }
         }
 
@@ -129,5 +131,10 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
             contentList.add(content)
         }
         return contentList
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mTTNativeExpressAd = null
     }
 }

@@ -14,13 +14,13 @@ import timber.log.Timber
 
 class TemplateBannerAdsActivity : AppCompatActivity() {
 
-    private lateinit var mTTTemplateBannerAd: TTNativeExpressAd
+    private var mTTTemplateBannerAd: TTNativeExpressAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_template_banner_ads)
 
-        requestTemplateBannerAd("945557236")
+        load_ad.setOnClickListener { requestTemplateBannerAd("945557236") }
     }
 
     fun requestTemplateBannerAd(mPlacementID: String) {
@@ -53,9 +53,12 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
                     return
                 }
                 mTTTemplateBannerAd = ads[0]
-                mTTTemplateBannerAd.setExpressInteractionListener(mExpressAdInteractionListener)
-                bindDislike(mTTTemplateBannerAd)
-                mTTTemplateBannerAd.render()
+
+                mTTTemplateBannerAd?.let {
+                    it.setExpressInteractionListener(mExpressAdInteractionListener)
+                    bindDislike(it)
+                    it.render()
+                }
             }
         }
 
@@ -88,5 +91,10 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
 
             override fun onCancel() {}
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mTTTemplateBannerAd = null
     }
 }
