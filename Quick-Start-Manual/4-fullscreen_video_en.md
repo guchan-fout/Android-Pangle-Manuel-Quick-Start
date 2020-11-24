@@ -68,8 +68,10 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
 `FullScreenVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTFullScreenVideoAd`'s `void showFullScreenVideoAd(Activity var1);`' to display the ad. We recommend to show the ad in `onFullScreenVideoCached()`.
 
+**After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
+
 ```kotlin
-private lateinit var mFullScreenVideoAd: TTFullScreenVideoAd
+private var mFullScreenVideoAd: TTFullScreenVideoAd? = null
 
 private val mTTFullScreenAdListener: FullScreenVideoAdListener =
     object : FullScreenVideoAdListener {
@@ -79,6 +81,31 @@ private val mTTFullScreenAdListener: FullScreenVideoAdListener =
 
         override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
             mFullScreenVideoAd = ttFullScreenVideoAd
+            mFullScreenVideoAd?.setFullScreenVideoAdInteractionListener(object : TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
+
+              override fun onSkippedVideo() {
+                Timber.d("fullscreen video onSkippedVideo")
+              }
+
+              override fun onAdShow() {
+                Timber.d("fullscreen video onAdShow")
+                // Only first show is a valid impression, please reload again to get another ad.
+                mFullScreenVideoAd = null
+                load_status.text = "Please reload"
+              }
+
+              override fun onAdVideoBarClick() {
+                Timber.d("fullscreen video onAdVideoBarClick")
+              }
+
+              override fun onVideoComplete() {
+                Timber.d("fullscreen video onVideoComplete")
+              }
+
+              override fun onAdClose() {
+                Timber.d("fullscreen video onAdClose")
+              }
+              })
         }
 
         override fun onFullScreenVideoCached() {

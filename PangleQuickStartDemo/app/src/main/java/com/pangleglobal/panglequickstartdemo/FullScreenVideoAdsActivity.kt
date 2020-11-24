@@ -12,7 +12,7 @@ import timber.log.Timber
 
 class FullScreenVideoAdsActivity : AppCompatActivity() {
 
-    private lateinit var mFullScreenVideoAd: TTFullScreenVideoAd
+    private var mFullScreenVideoAd: TTFullScreenVideoAd? = null
     private var mIsCached: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +25,8 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
         }
 
         show_ad.setOnClickListener {
-            if(mIsCached) {
-                mFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+            if (mIsCached) {
+                mFullScreenVideoAd?.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
             } else {
                 Timber.w("Not Cached yet")
             }
@@ -55,19 +55,23 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
     private val mTTFullScreenAdListener: FullScreenVideoAdListener =
         object : FullScreenVideoAdListener {
             override fun onError(i: Int, s: String) {
-                Timber.d("FullScreenVideoAdListener loaded fail .code=$s,message=$i")
+                Timber.d("FullScreenVideoAdListener loaded fail .code=$i,message=$s")
                 load_status.text = "Loading failed"
             }
 
             override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
                 mFullScreenVideoAd = ttFullScreenVideoAd
-                mFullScreenVideoAd.setFullScreenVideoAdInteractionListener(object : TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
+                mFullScreenVideoAd?.setFullScreenVideoAdInteractionListener(object :
+                    TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
                     override fun onSkippedVideo() {
                         Timber.d("fullscreen video onSkippedVideo")
                     }
 
                     override fun onAdShow() {
                         Timber.d("fullscreen video onAdShow")
+                        // Only first show is a valid impression, please reload again to get another ad.
+                        mFullScreenVideoAd = null
+                        load_status.text = "Please reload"
                     }
 
                     override fun onAdVideoBarClick() {

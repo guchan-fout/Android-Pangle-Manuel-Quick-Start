@@ -65,8 +65,10 @@ fun requestRewardedVideoAd(mPlacementID: String) {
 
 `RewardVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTRewardVideoAd`'s `void showRewardVideoAd(Activity var1);`' to display the ad. We recommend to the show ad in `onRewardVideoCached()`.
 
+**After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
+
 ```kotlin
-private lateinit var mRewardVideoAd: TTRewardVideoAd
+private var mRewardVideoAd: TTRewardVideoAd? = null
 
 private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
     override fun onError(i: Int, msg: String) {
@@ -75,6 +77,39 @@ private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdL
 
     override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
         mRewardVideoAd = ttRewardVideoAd
+        mRewardVideoAd?.setRewardAdInteractionListener(object : TTRewardVideoAd.RewardAdInteractionListener {
+
+          override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
+            Timber.d("reward video onRewardVerify")
+          }
+
+          override fun onSkippedVideo() {
+            Timber.d("reward video onSkippedVideo")
+          }
+
+          override fun onAdShow() {
+            Timber.d("reward video onAdShow")
+            // Only first show is a valid impression, please reload again to get another ad.
+            mRewardVideoAd = null
+            load_status.text = "Please reload"
+          }
+
+          override fun onAdVideoBarClick() {
+            Timber.d("reward video onAdVideoBarClick")
+          }
+
+          override fun onVideoComplete() {
+            Timber.d("reward video onVideoComplete")
+          }
+
+          override fun onAdClose() {
+            Timber.d("reward video onAdClose")
+          }
+
+          override fun onVideoError() {
+            Timber.d("reward video onVideoError")
+          }
+          })
     }
 
     override fun onRewardVideoCached() {

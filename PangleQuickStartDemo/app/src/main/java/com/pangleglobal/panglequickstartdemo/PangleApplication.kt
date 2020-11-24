@@ -5,7 +5,7 @@ import com.bytedance.sdk.openadsdk.TTAdConfig
 import com.bytedance.sdk.openadsdk.TTAdSdk
 import timber.log.Timber
 
-class PangleApplication: Application() {
+class PangleApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -21,7 +21,7 @@ class PangleApplication: Application() {
         TTAdSdk.init(this, buildAdConfig())
     }
 
-    private fun buildAdConfig() : TTAdConfig {
+    private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
             // Please use your own appId, this is for demo
             .appId("5081617")

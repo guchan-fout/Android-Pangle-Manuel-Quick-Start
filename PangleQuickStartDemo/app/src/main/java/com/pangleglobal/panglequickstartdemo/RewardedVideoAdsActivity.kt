@@ -2,17 +2,16 @@ package com.pangleglobal.panglequickstartdemo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bytedance.sdk.openadsdk.*
+import com.bytedance.sdk.openadsdk.AdSlot
+import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTAdNative.RewardVideoAdListener
+import com.bytedance.sdk.openadsdk.TTAdSdk
+import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import kotlinx.android.synthetic.main.activity_full_screen_video_ads.*
-import kotlinx.android.synthetic.main.activity_full_screen_video_ads.load_ad
-import kotlinx.android.synthetic.main.activity_full_screen_video_ads.load_status
-import kotlinx.android.synthetic.main.activity_full_screen_video_ads.show_ad
-import kotlinx.android.synthetic.main.activity_rewarded_video_ads.*
 import timber.log.Timber
 
 class RewardedVideoAdsActivity : AppCompatActivity() {
-    private lateinit var mRewardVideoAd: TTRewardVideoAd
+    private var mRewardVideoAd: TTRewardVideoAd? = null
     private var mIsCached: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +25,8 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
         }
 
         show_ad.setOnClickListener {
-            if(mIsCached) {
-                mRewardVideoAd.showRewardVideoAd(this)
+            if (mIsCached) {
+                mRewardVideoAd?.showRewardVideoAd(this)
             } else {
                 Timber.w("Not Cached yet")
             }
@@ -61,13 +60,14 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
     private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
         override fun onError(i: Int, msg: String) {
-            Timber.d("RewardVideoAdListener loaded fail .code=$msg,message=$i")
+            Timber.d("RewardVideoAdListener loaded fail .code=$i,message=$msg")
             load_status.text = "Loading failed"
         }
 
         override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
             mRewardVideoAd = ttRewardVideoAd
-            mRewardVideoAd.setRewardAdInteractionListener(object : TTRewardVideoAd.RewardAdInteractionListener {
+            mRewardVideoAd?.setRewardAdInteractionListener(object :
+                TTRewardVideoAd.RewardAdInteractionListener {
                 override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
                     Timber.d("reward video onRewardVerify")
                 }
@@ -78,6 +78,9 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
                 override fun onAdShow() {
                     Timber.d("reward video onAdShow")
+                    // Only first show is a valid impression, please reload again to get another ad.
+                    mRewardVideoAd = null
+                    load_status.text = "Please reload"
                 }
 
                 override fun onAdVideoBarClick() {
