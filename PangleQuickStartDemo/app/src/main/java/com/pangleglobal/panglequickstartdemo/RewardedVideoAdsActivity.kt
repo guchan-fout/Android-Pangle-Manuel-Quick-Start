@@ -2,19 +2,36 @@ package com.pangleglobal.panglequickstartdemo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bytedance.sdk.openadsdk.AdSlot
-import com.bytedance.sdk.openadsdk.TTAdConstant
+import com.bytedance.sdk.openadsdk.*
 import com.bytedance.sdk.openadsdk.TTAdNative.RewardVideoAdListener
-import com.bytedance.sdk.openadsdk.TTAdSdk
-import com.bytedance.sdk.openadsdk.TTRewardVideoAd
+import kotlinx.android.synthetic.main.activity_full_screen_video_ads.*
+import kotlinx.android.synthetic.main.activity_full_screen_video_ads.load_ad
+import kotlinx.android.synthetic.main.activity_full_screen_video_ads.load_status
+import kotlinx.android.synthetic.main.activity_full_screen_video_ads.show_ad
+import kotlinx.android.synthetic.main.activity_rewarded_video_ads.*
 import timber.log.Timber
 
 class RewardedVideoAdsActivity : AppCompatActivity() {
+    private lateinit var mRewardVideoAd: TTRewardVideoAd
+    private var mIsCached: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rewarded_video_ads)
 
-        requestRewardedVideoAd("945273302")
+        load_status.text = "Please click LOAD AD"
+
+        load_ad.setOnClickListener {
+            requestRewardedVideoAd("945273302")
+        }
+
+        show_ad.setOnClickListener {
+            if(mIsCached) {
+                mRewardVideoAd.showRewardVideoAd(this)
+            } else {
+                Timber.w("Not Cached yet")
+            }
+        }
     }
 
     fun requestRewardedVideoAd(mPlacementID: String) {
@@ -45,12 +62,45 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
     private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
         override fun onError(i: Int, msg: String) {
             Timber.d("RewardVideoAdListener loaded fail .code=$msg,message=$i")
+            load_status.text = "Loading failed"
         }
 
         override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
-            ttRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
+            mRewardVideoAd = ttRewardVideoAd
+            mRewardVideoAd.setRewardAdInteractionListener(object : TTRewardVideoAd.RewardAdInteractionListener {
+                override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
+                    Timber.d("reward video onRewardVerify")
+                }
+
+                override fun onSkippedVideo() {
+                    Timber.d("reward video onSkippedVideo")
+                }
+
+                override fun onAdShow() {
+                    Timber.d("reward video onAdShow")
+                }
+
+                override fun onAdVideoBarClick() {
+                    Timber.d("reward video onAdVideoBarClick")
+                }
+
+                override fun onVideoComplete() {
+                    Timber.d("reward video onVideoComplete")
+                }
+
+                override fun onAdClose() {
+                    Timber.d("reward video onAdClose")
+                }
+
+                override fun onVideoError() {
+                    Timber.d("reward video onVideoError")
+                }
+            })
         }
 
-        override fun onRewardVideoCached() {}
+        override fun onRewardVideoCached() {
+            mIsCached = true
+            load_status.text = "Video Cached"
+        }
     }
 }

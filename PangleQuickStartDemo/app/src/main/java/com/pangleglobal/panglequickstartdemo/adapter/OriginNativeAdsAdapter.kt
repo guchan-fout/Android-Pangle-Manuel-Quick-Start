@@ -30,7 +30,7 @@ class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel
         val view: View
         return if (viewType == TYPE_NORMAL) { // for call layout
             view = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.recyclerview_item, viewGroup, false)
+                .inflate(R.layout.recyclerview_feed_item, viewGroup, false)
             RecyclerAdapter.RecyclerAdapterViewHolder(view)
         } else {
             view = LayoutInflater.from(viewGroup.context)
@@ -51,7 +51,7 @@ class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel
             /**
              *  here is to set native ad's date to the view
              */
-            var ad: TTFeedAd = contentList[position].feedAd
+            val ad: TTFeedAd = contentList[position].feedAd
             holder.view.titleText.text = ad.title
             holder.view.descText.text = ad.description
             holder.view.adButton.text = ad.buttonText
@@ -59,7 +59,7 @@ class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel
 
             // this is video ad
             if (ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_SQUARE || ad.imageMode == TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL) {
-                var videoAd = ad.adView
+                val videoAd = ad.adView
                 if (videoAd != null) {
                     Timber.d("video exist")
                     holder.view.containerFrame.addView(ad.adView)

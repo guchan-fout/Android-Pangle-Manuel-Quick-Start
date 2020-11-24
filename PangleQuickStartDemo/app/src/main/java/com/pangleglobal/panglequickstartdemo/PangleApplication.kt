@@ -30,7 +30,7 @@ class PangleApplication: Application() {
             .debug(BuildConfig.DEBUG)
             // The default setting is SurfaceView.
             // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
-            .useTextureView(true)
+            .useTextureView(false)
             // Allow show Notification
             .allowShowNotify(true)
             // Whether to support multi-process, true indicates support

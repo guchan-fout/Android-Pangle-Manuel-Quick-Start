@@ -22,7 +22,7 @@ class TemplateNativeAdsContentAdapter(private val contentList: ArrayList<CellCon
         val view: View
         return if (viewType == TYPE_NORMAL) { // for call layout
             view = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.recyclerview_item, viewGroup, false)
+                .inflate(R.layout.recyclerview_feed_item, viewGroup, false)
             RecyclerAdapter.RecyclerAdapterViewHolder(view)
         } else {
             view = LayoutInflater.from(viewGroup.context)
