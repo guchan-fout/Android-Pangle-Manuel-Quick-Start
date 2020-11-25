@@ -67,6 +67,7 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
         override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
             mRewardVideoAd = ttRewardVideoAd
+            mIsCached = false
             mRewardVideoAd?.setRewardAdInteractionListener(object :
                 TTRewardVideoAd.RewardAdInteractionListener {
                 override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
@@ -108,7 +109,6 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
     // Only first show is a valid impression, please reload again to get another ad.
     private fun resetVideoAd() {
         mRewardVideoAd = null
-        mIsCached = false
         load_status.text = "Please reload"
     }
 }

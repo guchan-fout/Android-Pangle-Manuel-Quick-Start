@@ -62,6 +62,7 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
             override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
                 mFullScreenVideoAd = ttFullScreenVideoAd
+                mIsCached = false
                 mFullScreenVideoAd?.setFullScreenVideoAdInteractionListener(object :
                     TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
                     override fun onSkippedVideo() {
@@ -96,7 +97,6 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
     // Only first show is a valid impression, please reload again to get another ad.
     private fun resetVideoAd() {
         mFullScreenVideoAd = null
-        mIsCached = false
         load_status.text = "Please reload"
     }
 }
