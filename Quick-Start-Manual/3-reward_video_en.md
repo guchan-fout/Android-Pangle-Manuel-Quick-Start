@@ -87,10 +87,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rewarded_video_ads)
 
-
-    load_ad.setOnClickListener {
-        requestRewardedVideoAd("945273302")
-    }
+    ...
 
     show_ad.setOnClickListener {
         if (mIsCached) {
