@@ -95,6 +95,6 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mTTTemplateBannerAd = null
+        mTTTemplateBannerAd?.destroy()
     }
 }

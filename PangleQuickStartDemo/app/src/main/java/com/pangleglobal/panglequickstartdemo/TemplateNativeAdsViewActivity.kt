@@ -135,6 +135,6 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mTTNativeExpressAd = null
+        mTTNativeExpressAd?.destroy()
     }
 }
