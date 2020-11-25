@@ -40,7 +40,6 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
     }
 
     private fun requestFullScreenVideoAd(mPlacementID: String) {
-
         if (mPlacementID.isEmpty()) {
             Timber.e("PlacementId is null")
             return
@@ -71,44 +70,45 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 **After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
 
 ```kotlin
+
 private var mFullScreenVideoAd: TTFullScreenVideoAd? = null
+private var mIsCached: Boolean = false
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    ...
+
+    show_ad.setOnClickListener {
+        if (mIsCached) {
+            mFullScreenVideoAd?.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+            resetVideoAd()
+        } else {
+            Timber.w("Not Cached yet")
+        }
+    }
+}
 
 private val mTTFullScreenAdListener: FullScreenVideoAdListener =
     object : FullScreenVideoAdListener {
         override fun onError(i: Int, s: String) {
-            Timber.d("NativeExpressAdListener loaded fail .code=$s,message=$i")
+            Timber.d("FullScreenVideoAdListener loaded fail .code=$i,message=$s")
         }
 
         override fun onFullScreenVideoAdLoad(ttFullScreenVideoAd: TTFullScreenVideoAd) {
             mFullScreenVideoAd = ttFullScreenVideoAd
-            mFullScreenVideoAd?.setFullScreenVideoAdInteractionListener(object : TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
+            mIsCached = false
 
-              override fun onSkippedVideo() {
-                Timber.d("fullscreen video onSkippedVideo")
-              }
-
-              override fun onAdShow() {
-                Timber.d("fullscreen video onAdShow")
-              }
-
-              override fun onAdVideoBarClick() {
-                Timber.d("fullscreen video onAdVideoBarClick")
-              }
-
-              override fun onVideoComplete() {
-                Timber.d("fullscreen video onVideoComplete")
-              }
-
-              override fun onAdClose() {
-                Timber.d("fullscreen video onAdClose")
-              }
-              })
+            ...
+            
         }
 
         override fun onFullScreenVideoCached() {
-            mFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
-            // Only first show is a valid impression, please reload again to get another ad.
-            mFullScreenVideoAd = null
+            mIsCached = true
         }
     }
+
+// Only first show is a valid impression, please reload again to get another ad.
+private fun resetVideoAd() {
+    mFullScreenVideoAd = null
+    load_status.text = "Please reload"
+}
 ```

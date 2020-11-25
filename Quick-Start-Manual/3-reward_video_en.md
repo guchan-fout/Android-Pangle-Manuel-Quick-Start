@@ -31,6 +31,17 @@ Please set the ad's `Orientation` to fit for the app.
 In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadRewardVideoAd(AdSlot var1, @NonNull TTAdNative.RewardVideoAdListener var2);` to load the ad.
 
 ```kotlin
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_rewarded_video_ads)
+
+    load_ad.setOnClickListener {
+        requestRewardedVideoAd("945273302")
+    }
+    ...
+}
+
 fun requestRewardedVideoAd(mPlacementID: String) {
     Timber.d(mPlacementID)
     if (mPlacementID.isEmpty()) {
@@ -68,51 +79,50 @@ fun requestRewardedVideoAd(mPlacementID: String) {
 **After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
 
 ```kotlin
+
 private var mRewardVideoAd: TTRewardVideoAd? = null
+private var mIsCached: Boolean = false
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_rewarded_video_ads)
+
+
+    load_ad.setOnClickListener {
+        requestRewardedVideoAd("945273302")
+    }
+
+    show_ad.setOnClickListener {
+        if (mIsCached) {
+            mRewardVideoAd?.showRewardVideoAd(this)
+            resetVideoAd()
+        } else {
+            Timber.w("Not Cached yet")
+        }
+    }
+}
 
 private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdListener {
     override fun onError(i: Int, msg: String) {
-        Timber.d("RewardVideoAdListener loaded fail .code=$msg,message=$i")
+        Timber.d("RewardVideoAdListener loaded fail .code=$i,message=$msg")
     }
 
     override fun onRewardVideoAdLoad(ttRewardVideoAd: TTRewardVideoAd) {
         mRewardVideoAd = ttRewardVideoAd
-        mRewardVideoAd?.setRewardAdInteractionListener(object : TTRewardVideoAd.RewardAdInteractionListener {
+        mIsCached = false
 
-          override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
-            Timber.d("reward video onRewardVerify")
-          }
+        ...
 
-          override fun onSkippedVideo() {
-            Timber.d("reward video onSkippedVideo")
-          }
-
-          override fun onAdShow() {
-            Timber.d("reward video onAdShow")
-          }
-
-          override fun onAdVideoBarClick() {
-            Timber.d("reward video onAdVideoBarClick")
-          }
-
-          override fun onVideoComplete() {
-            Timber.d("reward video onVideoComplete")
-          }
-
-          override fun onAdClose() {
-            Timber.d("reward video onAdClose")
-          }
-
-          override fun onVideoError() {
-            Timber.d("reward video onVideoError")
-          }
-          })
     }
 
     override fun onRewardVideoCached() {
-        mRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
-        // Only first show is a valid impression, please reload again to get another ad.
-        mRewardVideoAd = null
+        mIsCached = true
     }
+}
+
+// Only first show is a valid impression, please reload again to get another ad.
+private fun resetVideoAd() {
+    mRewardVideoAd = null
+    load_status.text = "Please reload"
 }
 ```
