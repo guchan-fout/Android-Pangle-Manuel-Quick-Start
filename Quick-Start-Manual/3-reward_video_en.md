@@ -120,6 +120,5 @@ private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdL
 // Only first show is a valid impression, please reload again to get another ad.
 private fun resetVideoAd() {
     mRewardVideoAd = null
-    load_status.text = "Please reload"
 }
 ```
