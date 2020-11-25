@@ -89,9 +89,6 @@ private val mTTFullScreenAdListener: FullScreenVideoAdListener =
 
               override fun onAdShow() {
                 Timber.d("fullscreen video onAdShow")
-                // Only first show is a valid impression, please reload again to get another ad.
-                mFullScreenVideoAd = null
-                load_status.text = "Please reload"
               }
 
               override fun onAdVideoBarClick() {
@@ -110,6 +107,8 @@ private val mTTFullScreenAdListener: FullScreenVideoAdListener =
 
         override fun onFullScreenVideoCached() {
             mFullScreenVideoAd.showFullScreenVideoAd(this@FullScreenVideoAdsActivity)
+            // Only first show is a valid impression, please reload again to get another ad.
+            mFullScreenVideoAd = null
         }
     }
 ```

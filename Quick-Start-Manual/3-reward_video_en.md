@@ -89,9 +89,6 @@ private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdL
 
           override fun onAdShow() {
             Timber.d("reward video onAdShow")
-            // Only first show is a valid impression, please reload again to get another ad.
-            mRewardVideoAd = null
-            load_status.text = "Please reload"
           }
 
           override fun onAdVideoBarClick() {
@@ -114,6 +111,8 @@ private val mRewardedAdListener: RewardVideoAdListener = object : RewardVideoAdL
 
     override fun onRewardVideoCached() {
         mRewardVideoAd.showRewardVideoAd(this@RewardedVideoAdsActivity)
+        // Only first show is a valid impression, please reload again to get another ad.
+        mRewardVideoAd = null
     }
 }
 ```

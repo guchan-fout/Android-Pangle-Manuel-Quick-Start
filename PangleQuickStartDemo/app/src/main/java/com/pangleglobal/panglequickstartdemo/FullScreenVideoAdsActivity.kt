@@ -22,6 +22,7 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
         load_ad.setOnClickListener {
             requestFullScreenVideoAd("945277276")
+            resetVideoAd()
         }
 
         show_ad.setOnClickListener {
@@ -65,7 +66,6 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
                     TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
                     override fun onSkippedVideo() {
                         Timber.d("fullscreen video onSkippedVideo")
-                        resetVideoAd()
                     }
 
                     override fun onAdShow() {
@@ -79,12 +79,10 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
                     override fun onVideoComplete() {
                         Timber.d("fullscreen video onVideoComplete")
-                        resetVideoAd()
                     }
 
                     override fun onAdClose() {
                         Timber.d("fullscreen video onAdClose")
-                        resetVideoAd()
                     }
                 })
             }

@@ -27,6 +27,7 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
         show_ad.setOnClickListener {
             if (mIsCached) {
                 mRewardVideoAd?.showRewardVideoAd(this)
+                resetVideoAd()
             } else {
                 Timber.w("Not Cached yet")
             }
@@ -74,7 +75,6 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
                 override fun onSkippedVideo() {
                     Timber.d("reward video onSkippedVideo")
-                    resetVideoAd()
                 }
 
                 override fun onAdShow() {
@@ -87,17 +87,14 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
                 override fun onVideoComplete() {
                     Timber.d("reward video onVideoComplete")
-                    resetVideoAd()
                 }
 
                 override fun onAdClose() {
                     Timber.d("reward video onAdClose")
-                    resetVideoAd()
                 }
 
                 override fun onVideoError() {
                     Timber.d("reward video onVideoError")
-                    resetVideoAd()
                 }
             })
         }
