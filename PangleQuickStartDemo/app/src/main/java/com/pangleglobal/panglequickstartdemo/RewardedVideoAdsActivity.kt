@@ -74,13 +74,11 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
                 override fun onSkippedVideo() {
                     Timber.d("reward video onSkippedVideo")
+                    resetVideoAd()
                 }
 
                 override fun onAdShow() {
                     Timber.d("reward video onAdShow")
-                    // Only first show is a valid impression, please reload again to get another ad.
-                    mRewardVideoAd = null
-                    load_status.text = "Please reload"
                 }
 
                 override fun onAdVideoBarClick() {
@@ -89,14 +87,17 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
 
                 override fun onVideoComplete() {
                     Timber.d("reward video onVideoComplete")
+                    resetVideoAd()
                 }
 
                 override fun onAdClose() {
                     Timber.d("reward video onAdClose")
+                    resetVideoAd()
                 }
 
                 override fun onVideoError() {
                     Timber.d("reward video onVideoError")
+                    resetVideoAd()
                 }
             })
         }
@@ -105,5 +106,11 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
             mIsCached = true
             load_status.text = "Video Cached"
         }
+    }
+
+    // Only first show is a valid impression, please reload again to get another ad.
+    private fun resetVideoAd() {
+        mRewardVideoAd = null
+        load_status.text = "Please reload"
     }
 }

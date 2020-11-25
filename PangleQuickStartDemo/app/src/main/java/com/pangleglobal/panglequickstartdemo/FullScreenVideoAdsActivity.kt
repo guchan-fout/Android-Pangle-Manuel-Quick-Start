@@ -65,13 +65,12 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
                     TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
                     override fun onSkippedVideo() {
                         Timber.d("fullscreen video onSkippedVideo")
+                        resetVideoAd()
                     }
 
                     override fun onAdShow() {
                         Timber.d("fullscreen video onAdShow")
-                        // Only first show is a valid impression, please reload again to get another ad.
-                        mFullScreenVideoAd = null
-                        load_status.text = "Please reload"
+
                     }
 
                     override fun onAdVideoBarClick() {
@@ -80,10 +79,12 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 
                     override fun onVideoComplete() {
                         Timber.d("fullscreen video onVideoComplete")
+                        resetVideoAd()
                     }
 
                     override fun onAdClose() {
                         Timber.d("fullscreen video onAdClose")
+                        resetVideoAd()
                     }
                 })
             }
@@ -93,4 +94,10 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
                 load_status.text = "Video Cached"
             }
         }
+
+    // Only first show is a valid impression, please reload again to get another ad.
+    private fun resetVideoAd() {
+        mFullScreenVideoAd = null
+        load_status.text = "Please reload"
+    }
 }
