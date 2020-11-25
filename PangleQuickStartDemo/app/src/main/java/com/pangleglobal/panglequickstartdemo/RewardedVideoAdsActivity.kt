@@ -108,6 +108,7 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
     // Only first show is a valid impression, please reload again to get another ad.
     private fun resetVideoAd() {
         mRewardVideoAd = null
+        mIsCached = false
         load_status.text = "Please reload"
     }
 }
