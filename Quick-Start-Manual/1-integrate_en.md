@@ -15,6 +15,15 @@ This chapter will explain the procedure for integrating and Initializing the Pan
 * minSdkVersion 14 or higher
 * targetSdkVersion 29 or higher
 * Create a Pangle account [here](https://www.pangleglobal.com/)(If you do not have one), and add your app and placements.
+* From V3.4.0.0, we added a `<queries>` element to support Android 11(API level 30), please upgrade Android Gradle plugin to 4.1+ or following versions.
+
+  |  Support `<queries>` Gradle Versions  |
+  | ---- |
+  |  4.0.1 |
+  |  3.6.4 |
+  |  3.5.4 |
+  |  3.4.3 |
+  |  3.3.3 |
 
 
 <a name="start/integrate"></a>
