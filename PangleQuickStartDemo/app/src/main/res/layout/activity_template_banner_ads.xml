@@ -7,13 +7,21 @@
     tools:context=".TemplateBannerAdsActivity">
 
     <Button
-        android:text="load Ad"
-        android:id="@+id/load_ad"
+        android:id="@+id/load_rectangle_ad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="load 300*250 Ad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/load_banner_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="load 320*50 Ad"
+        app:layout_constraintTop_toBottomOf="@+id/load_rectangle_ad" />
 
     <TextView
         android:id="@+id/load_status"
@@ -24,13 +32,24 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <FrameLayout
-        android:id="@+id/bannerFrame"
+        android:id="@+id/rectangleFrame"
         android:layout_width="300dp"
         android:layout_height="250dp"
         android:foregroundGravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bannerFrame"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:foregroundGravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </FrameLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
