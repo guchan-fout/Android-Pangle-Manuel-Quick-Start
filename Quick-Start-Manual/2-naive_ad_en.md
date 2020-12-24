@@ -4,7 +4,7 @@
 * [Origin Native Ads](#start/native_ad_origin)
   * [Loading Ads](#start/native_ad_origin_load)
   * [Determining load events](#start/native_ad_origin_loadevent)
-  * [Displaying Ads](#start/native_ad_origin_display)
+  * [Displaying Ads and Registering Ads](#start/native_ad_origin_display)
 * [Template Native Ads](#start/native_ad_template)
   * [Loading Ads](#start/native_ad_template_load)
   * [Determining load events and Displaying Ads](#start/native_ad_template_loadevent)
@@ -101,7 +101,7 @@ private val mFeedAdListener: FeedAdListener = object : FeedAdListener {
 ```
 
 <a name="start/native_ad_origin_display"></a>
-### Displaying Ads
+### Displaying Ads and Registering Ads
 
 `nativeAd`'s parameters have parts like ad's title, description, images for displaying.
 
@@ -112,7 +112,7 @@ if the parameter`imageMode` in the `nativeAd` is **TTAdConstant.IMAGE_MODE_VIDEO
 
 Please add `TTNativeAd`'s `adLogoView` to the ad's view, this view will show the privacy information when been clicked.
 
-
+**Must** register clickable view in the ad via `TTFeedAd.registerViewForInteraction()`. You can set clickable area of the ad(etc. button/image/video) and this method will response to user clicks to redirected to the landing page, and **also watching the ad to trigger the impression event**.
 
 ```kotlin
 override fun onBindViewHolder(
