@@ -89,13 +89,13 @@ Add following permissions and **provider** to your app's `AndroidManifest.xml`.
 
 ```
 
-
+<a name="start/init"></a>
 ## Initialize the SDK
 Please call `TTAdSdk.init()` to initializes the SDK before you send any ad requests. `TTAdSdk.init()` only need to be called once per app’s lifecycle, we **strongly recommend** to do this on app launch.
 
 > :warning: Ads may be preloaded by the Pangle Ads SDK or mediation partner SDKs upon calling TTAdSdk.init(). If you need to obtain consent from users in the European Economic Area (EEA) or users under age, please ensure you do so before initializing the Pangle Ads SDK.
 
-If you use TextureView for video ads, please set `useTextureView(true)` in the Builder and add add "WAKE_LOCK" permission in the manifest.
+If you use TextureView for video ads, please set `useTextureView(true)` in the Builder and add add  `WAKE_LOCK`  permission in the manifest.
 
 
 ```kotlin
