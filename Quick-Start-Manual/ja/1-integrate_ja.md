@@ -123,7 +123,7 @@ class PangleApplication: Application() {
     private fun buildAdConfig() : TTAdConfig {
         return TTAdConfig.Builder()
             // Please use your own appId, this is for demo
-            .appId("5081617")
+            .appId("your app id")
             .appName(packageName)
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
