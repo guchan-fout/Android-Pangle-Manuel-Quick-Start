@@ -26,7 +26,7 @@ Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
 
 On Pangle platform, create an **Origin** ad in the app, you will get a **placement ID** for ad's loading.
 
-<img src="pics/native_origin.png" alt="drawing" width="200"/>
+<img src="../pics/native_origin.png" alt="drawing" width="200"/>
 
 
 In your application, create a `slot` for setting size and type for the ad and  use `TTAdNative` to load ads.
@@ -44,7 +44,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
 
         ...
 
-        requestOriginNativeAd("945538916")
+        requestOriginNativeAd("your placement id")
     }
 
 
@@ -75,7 +75,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
 <a name="start/native_ad_origin_loadevent"></a>
 ### Determining load events
 
-`FeedAdListener` indicates the result of ad's load. If ad is loaded,
+`FeedAdListener` indicates the result of ad's load. If ad is loaded, `TTFeedAd` which include the data of the ad will be passed from `onFeedAdLoad`.
 
 
 ```kotlin
