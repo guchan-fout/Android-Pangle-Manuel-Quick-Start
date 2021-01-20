@@ -23,9 +23,9 @@ Please set the ad's `Orientation` to fit for the app.
 `rewards name` and `rewards quantity` can be random if not needed.
 
 
-<img src="pics/reward_video_add.png" alt="drawing" width="300"/>  <br>
+<img src="../pics/reward_video_add.png" alt="drawing" width="300"/>  <br>
 
-<img src="pics/reward_video_set.png" alt="drawing" width="300"/>
+<img src="../pics/reward_video_set.png" alt="drawing" width="300"/>
 
 
 In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadRewardVideoAd(AdSlot var1, @NonNull TTAdNative.RewardVideoAdListener var2);` to load the ad.
@@ -37,7 +37,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     setContentView(R.layout.activity_rewarded_video_ads)
 
     load_ad.setOnClickListener {
-        requestRewardedVideoAd("945273302")
+        requestRewardedVideoAd("your placement id")
     }
     ...
 }

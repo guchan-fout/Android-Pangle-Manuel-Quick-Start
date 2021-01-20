@@ -1,34 +1,36 @@
-# 3. Rewarded Video Ads
+# 3. リワード動画広告
 
 
-* [Rewarded Video Ads](#start/reward_ad)
-  * [Loading Ads](#start/reward_ad_load)
-  * [Determining load events](#start/reward_ad_loadevent)
+* [リワード動画広告](#start/reward_ad)
+  * [リワード動画広告のロード](#start/reward_ad_load)
+  * [ロードイベントの受信と広告の表示](#start/reward_ad_loadevent)
 
+この章では、アプリでリワード動画広告を表示する手順について説明します。
 
-This chapter will explain the procedure for displaying the rewarded video ads in the application.
-
-Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
+広告を利用するには、SDKを有効にする必要があります。詳細は[インストールと初期化](1-integrate_ja.md) をご確認ください。
 
 
 <a name="start/reward_ad"></a>
-## Rewarded Video Ads
+## リワード動画広告
 
 <a name="start/reward_ad_load"></a>
-### Loading Ads
+### リワード動画広告のロード
 
-On Pangle platform, create an **Rewarded Video Ads** ad in the app, you will get a **placement ID** for ad's loading.
+Pangle管理画面上にて, 対象アプリに属する **Rewarded Video Ads** 広告を新規してください。 新規したらその広告枠の **placement ID** が生成されます。
 
-Please set the ad's `Orientation` to fit for the app.
-`rewards name` and `rewards quantity` can be random if not needed.
-
-
-<img src="pics/reward_video_add.png" alt="drawing" width="300"/>  <br>
-
-<img src="pics/reward_video_set.png" alt="drawing" width="300"/>
+アプリに合わせて広告の`Orientation`を設定してください。
+`rewards name`と`rewards quantity`は、必要がなければランダムにすることができます。
 
 
-In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadRewardVideoAd(AdSlot var1, @NonNull TTAdNative.RewardVideoAdListener var2);` to load the ad.
+
+
+<img src="../pics/reward_video_add.png" alt="drawing" width="300"/>  <br>
+
+<img src="../pics/reward_video_set.png" alt="drawing" width="300"/>
+
+アプリケーションで、 `TTAdNative`を作成し、` AdSlot`に広告のパラメータを設定し、 `TTAdNative`の` void loadRewardVideoAd（AdSlot var1、@ NonNull TTAdNative.RewardVideoAdListener var2）; `を使用して広告を読み込みます。
+
+
 
 ```kotlin
 
@@ -37,7 +39,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     setContentView(R.layout.activity_rewarded_video_ads)
 
     load_ad.setOnClickListener {
-        requestRewardedVideoAd("945273302")
+        requestRewardedVideoAd("your placement id")
     }
     ...
 }
@@ -72,11 +74,12 @@ fun requestRewardedVideoAd(mPlacementID: String) {
 ```
 
 <a name="start/reward_ad_loadevent"></a>
-### Determining load events and displaying
+### ロードイベントの受信と広告の表示
 
-`RewardVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTRewardVideoAd`'s `void showRewardVideoAd(Activity var1);`' to display the ad. We recommend to the show ad in `onRewardVideoCached()`.
+`RewardVideoAdListener`は、広告の読み込みの結果を示します。 広告が読み込まれている場合は、 `TTRewardVideoAd`の` void showRewardVideoAd（Activity var1）; `'を呼び出して広告を表示します。 `onRewardVideoCached（）`で広告を表示することをお勧めします。
 
-**After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
+
+**広告が表示された後、次の表示のために広告をリロードしてください。同じロードされた広告の有効なインプレッションは1回だけカウントされます。**
 
 ```kotlin
 
