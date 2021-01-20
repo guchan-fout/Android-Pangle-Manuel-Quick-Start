@@ -15,16 +15,16 @@ Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
 ## Full Screen Video Ads
 
 <a name="start/fullscreen_load"></a>
-### Full Screen Ads
+### Loading Ads
 
 On Pangle platform, create an **Interstitial Video Ads** ad in the app, you will get a **placement ID** for ad's loading.
 
 Please set the ad's `Orientation` to fit for the app.
 
 
-<img src="pics/fullscreen_add.png" alt="drawing" width="300"/>  <br>
+<img src="../pics/fullscreen_add.png" alt="drawing" width="300"/>  <br>
 
-<img src="pics/fullscreen_set.png" alt="drawing" width="300"/>
+<img src="../pics/fullscreen_set.png" alt="drawing" width="300"/>
 
 
 In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadFullScreenVideoAd(AdSlot var1, @NonNull TTAdNative.FullScreenVideoAdListener var2);` to load the ad.
@@ -36,7 +36,7 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ...
 
-        requestFullScreenVideoAd("945277276")
+        requestFullScreenVideoAd("your placement id")
     }
 
     private fun requestFullScreenVideoAd(mPlacementID: String) {

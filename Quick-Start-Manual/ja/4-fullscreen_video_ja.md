@@ -1,33 +1,33 @@
-# 4. Full Screen Video Ads
+# 4. フルスクリーン動画広告
 
 
-* [Full Screen Video Ads](#start/fullscreen_ad)
-  * [Loading Ads](#start/fullscreen_load)
-  * [Determining load events and Displaying the ad](#start/fullscreen_loadevent)
+* [フルスクリーン動画広告](#start/fullscreen_ad)
+  * [フルスクリーン動画広告のロード](#start/fullscreen_load)
+  * [ロードイベントの受信と広告の表示](#start/fullscreen_loadevent)
 
 
-This chapter will explain the procedure for displaying the full screen video ads in the application.
+この章では、アプリでフルスクリーン動画広告を表示する手順について説明します。
 
-Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
+広告を利用するには、SDKを有効にする必要があります。詳細は[インストールと初期化](1-integrate_ja.md) をご確認ください。
+
 
 
 <a name="start/fullscreen_ad"></a>
-## Full Screen Video Ads
+## フルスクリーン動画広告
 
 <a name="start/fullscreen_load"></a>
-### Full Screen Ads
+### フルスクリーン動画広告のロード
 
-On Pangle platform, create an **Interstitial Video Ads** ad in the app, you will get a **placement ID** for ad's loading.
+Pangle管理画面上にて, 対象アプリに属する **Interstitial Video Ads** 広告を新規してください。 新規したらその広告枠の **placement ID** が生成されます。
 
-Please set the ad's `Orientation` to fit for the app.
-
-
-<img src="pics/fullscreen_add.png" alt="drawing" width="300"/>  <br>
-
-<img src="pics/fullscreen_set.png" alt="drawing" width="300"/>
+アプリに合わせて広告の`Orientation`を設定してください。
 
 
-In your application, create a `TTAdNative` and set the ad's parameter in a `AdSlot`, use `TTAdNative`'s `void loadFullScreenVideoAd(AdSlot var1, @NonNull TTAdNative.FullScreenVideoAdListener var2);` to load the ad.
+<img src="../pics/fullscreen_add.png" alt="drawing" width="300"/>  <br>
+
+<img src="../pics/fullscreen_set.png" alt="drawing" width="300"/>
+
+アプリケーションで、 `TTAdNative`を作成し、` AdSlot`に広告のパラメータを設定し、 `TTAdNative`の` void loadFullScreenVideoAd（AdSlot var1、@ NonNull TTAdNative.FullScreenVideoAdListener var2）; `を使用して広告を読み込みます。
 
 
 ```kotlin
@@ -36,7 +36,7 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ...
 
-        requestFullScreenVideoAd("945277276")
+        requestFullScreenVideoAd("your placement id")
     }
 
     private fun requestFullScreenVideoAd(mPlacementID: String) {
@@ -63,11 +63,13 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
 ```
 
 <a name="start/fullscreen_loadevent"></a>
-### Determining load events and Displaying
+### ロードイベントの受信と広告の表示
+
+`FullScreenVideoAdListener`は、広告の読み込みの結果を示します。 広告が読み込まれている場合は、 `TTFullScreenVideoAd`の` void showFullScreenVideoAd（Activity var1）; `'を呼び出して広告を表示します。 `onFullScreenVideoCached（）`に広告を表示することをお勧めします。
 
 `FullScreenVideoAdListener` indicates the result of ad's load. If ad is loaded, call `TTFullScreenVideoAd`'s `void showFullScreenVideoAd(Activity var1);`' to display the ad. We recommend to show the ad in `onFullScreenVideoCached()`.
 
-**After the ad showed, please reload ads for next showing, same loaded ad's valid impression will only be counted once.**
+**広告が表示された後、次の表示のために広告をリロードしてください。同じロードされた広告の有効なインプレッションは1回だけカウントされます。**
 
 ```kotlin
 
