@@ -18,23 +18,31 @@ Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
 <a name="start/template_banner_support_version"></a>
 ### Support SDK Verion
 Please Use the following sdk for template banner
- - Pangle Android 3.1.7.0 or later
+ - Pangle Android SDK 3.1.7.0 or later
 
 <a name="start/template_banner_ad_load"></a>
 ### Loading Ads
 
-On Pangle platform, create an **Template Banner** ad in the app, you will get a **placement ID** for ad's loading.
+On Pangle platform, create an **Template Banner** ad in the app.
 
-**Please select 600*500 at Ad placement size, for now we only opened this size's traffic.**
+Plase set **Template** at [Native type].
 
-<img src="pics/template_banner_add.png" alt="drawing" width="200"/>
+You will get a **placement ID** for ad's loading.
 
-<img src="pics/template_banner_set.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_add.png" alt="drawing" width="200"/>
+
+**Please select [600 * 500]  for 300*250.**
+
+<img src="../pics/template_banner_set.png" alt="drawing" width="200"/>
+
+**Please select [640 * 100]  for 320*50.**
+
+<img src="../pics/template320_add.png" alt="drawing" width="200"/>
 
 
 In your application, create a `slot` and use `setExpressViewAcceptedSize` for setting size and use `TTAdNative`'s `void loadBannerExpressAd(AdSlot var1, @NonNull TTAdNative.NativeExpressAdListener var2);`' to load ads.
 
-**For now pangle only support size 300*250. Please set this size.**
+**Please set this size to 300 * 250 or 320 * 50**
 
 
 ```kotlin
@@ -46,7 +54,7 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_template_banner_ads)
 
-        requestTemplateBannerAd("945557236")
+        requestTemplateBannerAd("your placement id")
     }
 
     fun requestTemplateBannerAd(mPlacementID: String) {

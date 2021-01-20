@@ -1,40 +1,48 @@
-# 5. Template Banner Ads
+# 5. テンプレートバナー広告
 
 
-* [Template Banner Ads](#start/template_banner_ad)
-  * [Support SDK Verion](#start/template_banner_support_version)
-  * [Loading Ads](#start/template_banner_ad_load)
-  * [Determining load events and Displaying](#start/template_banner_ad_loadevent)
+* [テンプレートバナー広告](#start/template_banner_ad)
+  * [必要なSDKバージョン](#start/template_banner_support_version)
+  * [テンプレートバナー広告のロード](#start/template_banner_ad_load)
+  * [ロードイベントの受信と広告の表示](#start/template_banner_ad_loadevent)
 
 
-This chapter will explain the procedure for displaying the template banner in the application.
+この章では、テンプレートバナー広告を表示する手順について説明します。
 
-Please [integrate Pangle SDK](1-integrate_en.md) before load ads.
+広告を利用するには、SDKを有効にする必要があります。詳細は[インストールと初期化](1-integrate_ja.md) をご確認ください。
+
 
 
 <a name="start/template_banner_ad"></a>
-## Template Banner Ads
+## テンプレートバナー広告
 
 <a name="start/template_banner_support_version"></a>
-### Support SDK Verion
-Please Use the following sdk for template banner
- - Pangle Android 3.1.7.0 or later
+### 必要なSDKバージョン
+以下のSDKバージョンでテンプレートバナー広告をサポートできます。
+ - Pangle Android SDK 3.1.7.0 or higher
 
 <a name="start/template_banner_ad_load"></a>
-### Loading Ads
+### テンプレートバナー広告のロード
 
-On Pangle platform, create an **Template Banner** ad in the app, you will get a **placement ID** for ad's loading.
+Pangle管理画面上にて, 対象アプリに属する**Template Banner** 広告を新規してください。
+[Native type]に **Template** を選んでください。
 
-**Please select 600*500 at Ad placement size, for now we only opened this size's traffic.**
+新規したらその広告枠の **placement ID** が生成されます。
 
-<img src="pics/template_banner_add.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_add.png" alt="drawing" width="200"/>
 
-<img src="pics/template_banner_set.png" alt="drawing" width="200"/>
+**300*250をご利用の場合、[600 * 500] を選んでください.**
+
+<img src="../pics/template_banner_set.png" alt="drawing" width="200"/>
+
+**320*50をご利用の場合、[640 * 100] を選んでください.**
+
+<img src="../pics/template320_add.png" alt="drawing" width="200"/>
+
+アプリケーションで、 `slot`を作成し、` setExpressViewAcceptedSize`を使用してサイズを設定し、 `TTAdNative`の` void loadBannerExpressAd（AdSlot var1、@ NonNull TTAdNative.NativeExpressAdListener var2）; `'を使用して広告を読み込みます。
 
 
-In your application, create a `slot` and use `setExpressViewAcceptedSize` for setting size and use `TTAdNative`'s `void loadBannerExpressAd(AdSlot var1, @NonNull TTAdNative.NativeExpressAdListener var2);`' to load ads.
-
-**For now pangle only support size 300*250. Please set this size.**
+**サイズは300 * 250 または 320 * 50を設定してください。**
 
 
 ```kotlin
@@ -46,7 +54,7 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_template_banner_ads)
 
-        requestTemplateBannerAd("945557236")
+        requestTemplateBannerAd("your placement id")
     }
 
     fun requestTemplateBannerAd(mPlacementID: String) {
@@ -74,11 +82,12 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
 ```
 
 <a name="start/template_banner_ad_loadevent"></a>
-### Determining load events and Displaying
+### ロードイベントの受信と広告の表示
 
-`NativeExpressAdListener` indicates the result of ad's load. If ad is loaded, please bind dislike to the `TTNativeExpressAd` for user's feedback to the ad, and call 'render()' to render the ad.
+`NativeExpressAdListener`は、広告の読み込みの結果を示します。 広告が読み込まれている場合は、ユーザーにフィードバック機能を与える`dislike`を「TTNativeExpressAd」にバインドし、`render（）`を呼び出して広告をレンダリングしてください。
 
- `ExpressAdInteractionListener` will return the ad's render result. If render succeed, you will get a ad view to display.
+`ExpressAdInteractionListener`は、広告のレンダリング結果を返します。 レンダリングが成功すると、表示する広告ビューを受け取れます。
+
 
 ```kotlin
 private val mTTBannerNativeExpressAdListener: NativeExpressAdListener =
