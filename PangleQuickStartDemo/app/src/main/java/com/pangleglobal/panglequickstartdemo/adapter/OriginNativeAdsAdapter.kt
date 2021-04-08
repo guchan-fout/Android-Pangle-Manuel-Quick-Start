@@ -145,7 +145,7 @@ class OriginNativeAdsAdapter(private val contentList: ArrayList<CellContentModel
                 Timber.d("onCancel")
             }
 
-            //override fun onRefuse() {}
+            override fun onRefuse() {}
         })
         dislikeView.setOnClickListener { ttAdDislike?.showDislikeDialog() }
     }

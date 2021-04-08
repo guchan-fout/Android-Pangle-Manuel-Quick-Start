@@ -116,7 +116,8 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
             }
 
             override fun onCancel() {}
-            //override fun onRefuse() {}
+
+            override fun onRefuse() {}
         })
     }
 

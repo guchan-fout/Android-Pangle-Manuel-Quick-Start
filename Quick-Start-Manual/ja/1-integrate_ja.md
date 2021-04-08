@@ -33,24 +33,26 @@
 <a name="start/import"></a>
 ### Pangle SDK 導入
 
-プロジェクトレベルの`build.gradle`の`allprojects`セクションに`jcenter（）`を追加します。
+プロジェクトレベルの`build.gradle`の`allprojects`セクションのmavenに`url 'https://artifact.bytedance.com/repository/pangle'`を追加します。
 
 ```gradle
 allprojects {
     repositories {
-        jcenter()
+      maven {
+        url 'https://artifact.bytedance.com/repository/pangle'
+      }
     }
 }
 ```
 
-次に、アプリレベルの`build.gradle`を開き、`dependencies` セクションに「com.bytedance.sdk：pangle-sdk：x.x.x.x」を追加します。
+次に、アプリレベルの`build.gradle`を開き、`dependencies` セクションに`implementation 'com.pangle.global:ads-sdk:x.x.x.x'` を追加します。
  Android Advertising IDを使用するには、`com.google.android.gms：play-services-ads-identifier` を追加することもお勧めします。
 
 
 ```gradle
 dependencies {
     ...
-    implementation 'com.bytedance.sdk:pangle-sdk:3.1.5.3'
+    implementation 'com.pangle.global:ads-sdk:3.5.0.5'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     ...
 

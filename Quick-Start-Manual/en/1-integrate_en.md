@@ -31,23 +31,25 @@ This chapter will explain the procedure for integrating and Initializing the Pan
 
 <a name="start/import"></a>
 ### Import the Pangle SDK
-Add `jcenter()` to the `allprojects` section of your project-level `build.gradle`.
+Add `url 'https://artifact.bytedance.com/repository/pangle'` maven in the `allprojects` section of your project-level `build.gradle`.
 
 ```gradle
 allprojects {
     repositories {
-        jcenter()
+      maven {
+        url 'https://artifact.bytedance.com/repository/pangle'
+      }
     }
 }
 ```
 
-Next, open the app-level `build.gradle` file for your app, add `implementation 'com.bytedance.sdk:pangle-sdk:x.x.x.x'` in "dependencies" section.
+Next, open the app-level `build.gradle` file for your app, add `implementation 'com.pangle.global:ads-sdk:x.x.x.x'` in "dependencies" section.
 In order to use the Android Advertising ID, we also recommend add  `com.google.android.gms:play-services-ads-identifier`.
 
 ```gradle
 dependencies {
     ...
-    implementation 'com.bytedance.sdk:pangle-sdk:3.1.5.3'
+    implementation 'com.pangle.global:ads-sdk:3.5.0.5'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     ...
 

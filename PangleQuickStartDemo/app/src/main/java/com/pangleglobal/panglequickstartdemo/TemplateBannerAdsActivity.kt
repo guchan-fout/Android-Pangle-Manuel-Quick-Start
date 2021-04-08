@@ -153,7 +153,7 @@ class TemplateBannerAdsActivity : AppCompatActivity() {
 
             override fun onCancel() {}
 
-            //override fun onRefuse() {}
+            override fun onRefuse() {}
         })
     }
 
