@@ -56,7 +56,6 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
         val mTTAdNative = mTTAdManager.createAdNative(this)
         val adSlot = AdSlot.Builder()
             .setCodeId(mPlacementID)
-            .setSupportDeepLink(true)
             .setAdCount(1)
             .setExpressViewAcceptedSize(300F, 250F)
             .build()
