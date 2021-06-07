@@ -96,7 +96,9 @@ dependencies {
 
 <a name="start/init"></a>
 ## Panlge SDKの初期化
-広告リクエストを送信する前に、`TTAdSdk.init（）`を呼び出してSDKを初期化してください。 `TTAdSdk.init（）``は、アプリのライフサイクルごとに1回だけ呼び出す必要があります。これは、アプリの起動時に行うことを**強くお勧め**します。
+広告リクエストを送信する前に、`TTAdSdk.init(final Context var0, final TTAdConfig var1, final TTAdSdk.InitCallback var2)`を呼び出してSDKを初期化してください。 `init'は、アプリのライフサイクルごとに1回だけ呼び出す必要があります。これは、アプリの起動時に行うことを**強くお勧め**します。
+
+初期化の結果は`TTAdSdk.InitCallback`から通知されます。
 
 
 
