@@ -60,9 +60,7 @@ class NativeAdsViewActivity : AppCompatActivity() {
         mTTAdNative = mTTAdManager.createAdNative(this)
         val adSlot = AdSlot.Builder()
             .setCodeId(mPlacementID)
-            .setSupportDeepLink(true)
             .setAdCount(1)
-            .setImageAcceptedSize(300, 250)
             .build()
         mTTAdNative.loadFeedAd(adSlot, mFeedAdListener)
     }

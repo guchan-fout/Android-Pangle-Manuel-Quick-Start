@@ -56,13 +56,10 @@ fun requestRewardedVideoAd(mPlacementID: String) {
     val mTTAdNative = mTTAdManager.createAdNative(this)
     val adSlot = AdSlot.Builder()
         .setCodeId(mPlacementID)
-        .setSupportDeepLink(true)
-        .setImageAcceptedSize(1080, 1920) //Set size to fit your ad slot size
         .setRewardName("your reward's name") //Parameter for rewarded video ad requests, name of the reward
         .setRewardAmount(1) // The number of rewards in rewarded video ad
         .setUserID("your app user id") //User ID, a required parameter for rewarded video ads
         .setMediaExtra("media_extra") //optional parameter
-        .setOrientation(TTAdConstant.VERTICAL) //Set how you wish the video ad to be displayed, choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
         .build()
 
     //load ad

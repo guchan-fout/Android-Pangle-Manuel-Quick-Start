@@ -50,9 +50,6 @@ class FullScreenVideoAdsActivity : AppCompatActivity() {
         val mTTAdNative = mTTAdManager.createAdNative(this)
         val adSlot = AdSlot.Builder()
             .setCodeId(mPlacementID)
-            .setSupportDeepLink(true)
-            .setImageAcceptedSize(1080, 1920)
-            .setOrientation(TTAdConstant.VERTICAL) //required parameter ，Set how you wish the video ad to be displayed ,choose from TTAdConstant.HORIZONTAL or TTAdConstant.VERTICAL
             .build()
         mTTAdNative.loadFullScreenVideoAd(adSlot, mTTFullScreenAdListener)
     }

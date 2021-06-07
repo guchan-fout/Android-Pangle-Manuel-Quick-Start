@@ -119,13 +119,23 @@ class PangleApplication: Application() {
     }
 
     private fun initSdk() {
-        TTAdSdk.init(this, buildAdConfig())
+        TTAdSdk.init(this, buildAdConfig(), mInitCallback)
     }
 
-    private fun buildAdConfig() : TTAdConfig {
+    private val mInitCallback: TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
+        override fun success() {
+            Timber.d("init succeeded")
+        }
+
+        override fun fail(p0: Int, p1: String?) {
+            Timber.d("init failed. reason = $p1")
+        }
+    }
+
+    private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
             // Please use your own appId, this is for demo
-            .appId("your app id")
+            .appId("5081617")
             .appName(packageName)
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
@@ -140,7 +150,6 @@ class PangleApplication: Application() {
             .coppa(0)
             //Fields to indicate whether you are protected by GDPR,  the value of GDPR : 0 close GDRP Privacy protection ，1: open GDRP Privacy protection
             .setGDPR(0)
-            .build()
-    }
+
 }
 ```

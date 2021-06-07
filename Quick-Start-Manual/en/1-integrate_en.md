@@ -93,7 +93,9 @@ Add following permissions and **provider** to your app's `AndroidManifest.xml`.
 
 <a name="start/init"></a>
 ## Initialize the SDK
-Please call `TTAdSdk.init()` to initializes the SDK before you send any ad requests. `TTAdSdk.init()` only need to be called once per app’s lifecycle, we **strongly recommend** to do this on app launch.
+Please call `TTAdSdk.init(final Context var0, final TTAdConfig var1, final TTAdSdk.InitCallback var2)` to initializes the SDK before you send any ad requests. `init` only need to be called once per app’s lifecycle, we **strongly recommend** to do this on app launch.
+
+`TTAdSdk.InitCallback` will be informed about the result of the initialize.
 
 > :warning: Ads may be preloaded by the Pangle Ads SDK or mediation partner SDKs upon calling TTAdSdk.init(). If you need to obtain consent from users in the European Economic Area (EEA) or users under age, please ensure you do so before initializing the Pangle Ads SDK.
 
@@ -114,13 +116,23 @@ class PangleApplication: Application() {
     }
 
     private fun initSdk() {
-        TTAdSdk.init(this, buildAdConfig())
+        TTAdSdk.init(this, buildAdConfig(), mInitCallback)
     }
 
-    private fun buildAdConfig() : TTAdConfig {
+    private val mInitCallback: TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
+        override fun success() {
+            Timber.d("init succeeded")
+        }
+
+        override fun fail(p0: Int, p1: String?) {
+            Timber.d("init failed. reason = $p1")
+        }
+    }
+
+    private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
             // Please use your own appId, this is for demo
-            .appId("your app id")
+            .appId("5081617")
             .appName(packageName)
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
@@ -135,7 +147,6 @@ class PangleApplication: Application() {
             .coppa(0)
             //Fields to indicate whether you are protected by GDPR,  the value of GDPR : 0 close GDRP Privacy protection ，1: open GDRP Privacy protection
             .setGDPR(0)
-            .build()
-    }
+           
 }
 ```
