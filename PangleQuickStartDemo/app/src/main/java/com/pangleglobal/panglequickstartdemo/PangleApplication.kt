@@ -18,7 +18,17 @@ class PangleApplication : Application() {
     }
 
     private fun initSdk() {
-        TTAdSdk.init(this, buildAdConfig())
+        TTAdSdk.init(this, buildAdConfig(), mInitCallback)
+    }
+
+    private val mInitCallback : TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
+        override fun success() {
+            Timber.d("init succeeded")
+        }
+
+        override fun fail(p0: Int, p1: String?) {
+            Timber.d("init failed. reason = $p1")
+        }
     }
 
     private fun buildAdConfig(): TTAdConfig {

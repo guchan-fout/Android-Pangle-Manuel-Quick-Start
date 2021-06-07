@@ -17,10 +17,11 @@ buildscript {
 allprojects {
     repositories {
         google()
+        //mavenCentral()
         jcenter()
-        maven {
-            url 'https://artifact.bytedance.com/repository/pangle'
-        }
+        maven {url 'https://artifact.bytedance.com/repository/pangle'}
+
+        maven { url 'https://android-sdk.is.com/' }
     }
 }
 
