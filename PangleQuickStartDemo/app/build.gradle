@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    // This is for manuel integrate
+    // implementation(name:'open_ad_sdk', ext:'aar')
+
     implementation 'com.pangle.global:ads-sdk:3.6.0.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 
