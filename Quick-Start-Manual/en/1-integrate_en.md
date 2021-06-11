@@ -15,7 +15,7 @@ This chapter will explain the procedure for integrating and Initializing the Pan
 * minSdkVersion 14 or higher
 * targetSdkVersion 29 or higher
 * Create a Pangle account [here](https://www.pangleglobal.com/)(If you do not have one), and add your app and placements.
-* From V3.4.0.0, we added a `<queries>` element to support Android 11(API level 30), please upgrade Android Gradle plugin to 4.1+ or following versions.
+* From v3.4.0.0, we added a `<queries>` element to support Android 11(API level 30), please upgrade Android Gradle plugin to 4.1+ or following versions.
 
   |  Support `<queries>` Gradle Versions  |
   | ---- |
@@ -49,7 +49,7 @@ In order to use the Android Advertising ID, we also recommend add  `com.google.a
 ```gradle
 dependencies {
     ...
-    implementation 'com.pangle.global:ads-sdk:3.5.0.5'
+    implementation 'com.pangle.global:ads-sdk:3.6.0.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     ...
 
@@ -93,14 +93,13 @@ Add following permissions and **provider** to your app's `AndroidManifest.xml`.
 
 <a name="start/init"></a>
 ## Initialize the SDK
-Please call `TTAdSdk.init(final Context var0, final TTAdConfig var1, final TTAdSdk.InitCallback var2)` to initializes the SDK before you send any ad requests. `init` only need to be called once per app’s lifecycle, we **strongly recommend** to do this on app launch.
+Initialize Pangle SDK asynchronously is supported since the v3.5.0.0 SDK, please call `TTAdSdk.init(final Context var0, final TTAdConfig var1, final TTAdSdk.InitCallback var2)` to initializes the SDK before you send any ad requests. `init` only need to be called once per app’s lifecycle, we **strongly recommend** to do this on app launch.
 
 `TTAdSdk.InitCallback` will be informed about the result of the initialize.
 
-> :warning: Ads may be preloaded by the Pangle Ads SDK or mediation partner SDKs upon calling TTAdSdk.init(). If you need to obtain consent from users in the European Economic Area (EEA) or users under age, please ensure you do so before initializing the Pangle Ads SDK.
-
 If you use TextureView for video ads, please set `useTextureView(true)` in the Builder and add add  `WAKE_LOCK`  permission in the manifest.
 
+> Before v3.5.0.0, please use synchronous method `TTAdSdk.init(Context var0, TTAdConfig var1)` to initialize.
 
 ```kotlin
 class PangleApplication: Application() {
@@ -131,22 +130,29 @@ class PangleApplication: Application() {
 
     private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
-            // Please use your own appId, this is for demo
-            .appId("5081617")
-            .appName(packageName)
+            // Please use your own appId,
+            .appId("your_app_id")
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
-            // The default setting is SurfaceView.
+            // The default setting is SurfaceView. We strongly recommend to set this to true.
             // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
             .useTextureView(true)
-            // Allow show Notification
-            .allowShowNotify(true)
-            // Whether to support multi-process, true indicates support
-            .supportMultiProcess(false)
             // Fields to indicate whether you are a child or an adult ，0:adult ，1:child
             .coppa(0)
-            //Fields to indicate whether you are protected by GDPR,  the value of GDPR : 0 close GDRP Privacy protection ，1: open GDRP Privacy protection
+            //Fields to indicate whether you are protected by GDPR,  the value of GDPR. 0: close GDRP Privacy protection ，1: open GDRP Privacy protection
             .setGDPR(0)
-           
-}
+            .build()
+    }
 ```
+
+
+You also could check the initialization status with the method `TTAdSdk.isInitSuccess()`
+
+```kotlin
+private fun checkInitResult(): Boolean {
+   return TTAdSdk.isInitSuccess()
+}
+
+```
+
+> :warning: Ads may be preloaded by the Pangle Ads SDK or mediation partner SDKs after initial. If you need to obtain consent from users under age 13, please ensure you do so before initializing the Pangle Ads SDK.

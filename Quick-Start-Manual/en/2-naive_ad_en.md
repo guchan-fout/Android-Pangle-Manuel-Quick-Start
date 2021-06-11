@@ -5,9 +5,6 @@
   * [Loading Ads](#start/native_ad_origin_load)
   * [Determining load events](#start/native_ad_origin_loadevent)
   * [Displaying Ads and Registering Ads](#start/native_ad_origin_display)
-* [Template Native Ads](#start/native_ad_template)
-  * [Loading Ads](#start/native_ad_template_load)
-  * [Determining load events and Displaying Ads](#start/native_ad_template_loadevent)
 
 
 
@@ -219,113 +216,5 @@ private fun bindDislikeAction(
         }
     })
     dislikeView.setOnClickListener { ttAdDislike?.showDislikeDialog() }
-}
-```
-
-
-
-
-
-<a name="start/native_ad_template"></a>
-## Template Native Ads
-
-<a name="start/native_ad_template_load"></a>
-## Loading Ads
-
-On Pangle platform, create an **Template** ad in the app, you will get a **placement ID** for ad's loading.
-
-<img src="pics/native_template.png" alt="drawing" width="200"/>
-
-In your application, create a `slot` and set the size by `setExpressViewAcceptedSize`, use `TTNativeAd`'s
-`void loadNativeExpressAd(AdSlot var1, @NonNull TTAdNative.NativeExpressAdListener var2);` to load the ad.
-SDK will return a same size's ad.
-
-```kotlin
-
-fun requestTemplateNativeAd(mPlacementID: String) {
-    Timber.d(mPlacementID)
-    if (mPlacementID.isEmpty()) {
-        Timber.e("PlacementId is null")
-        return
-    }
-
-    //init Pangle ad manager
-    val mTTAdManager = TTAdSdk.getAdManager()
-    val mTTAdNative = mTTAdManager.createAdNative(this)
-    val adSlot = AdSlot.Builder()
-        .setCodeId(mPlacementID)
-        .setSupportDeepLink(true)
-        .setAdCount(1)
-        .setExpressViewAcceptedSize(300F, 250F)
-        .build()
-    mTTAdNative.loadNativeExpressAd(adSlot, mTTNativeExpressAdListener)
-}
-```
-
-
-<a name="start/native_ad_template_loadevent"></a>
-## Determining load events and Displaying Ads
-
-`NativeExpressAdListener` indicates the result of ad's load. If ad is loaded, **must call `render()` for rending the ad.**
-
-The result of render will be indicated by `ExpressAdInteractionListener`, ad's view will be passed in `onRenderSuccess`.
-
-```kotlin
-private val mTTNativeExpressAdListener: NativeExpressAdListener =
-    object : NativeExpressAdListener {
-        override fun onError(code: Int, message: String) {
-            Timber.d("NativeExpressAdListener loaded fail .code=$code,message=$message")
-        }
-
-        override fun onNativeExpressAdLoad(ads: List<TTNativeExpressAd>) {
-            if (ads == null || ads.isEmpty()) {
-                return
-            }
-            mTTNativeExpressAd = ads[0]
-            mTTNativeExpressAd.setExpressInteractionListener(mExpressAdInteractionListener)
-            bindDislike(mTTNativeExpressAd)
-            mTTNativeExpressAd.render()
-        }
-    }
-
-private val mExpressAdInteractionListener: ExpressAdInteractionListener =
-    object : ExpressAdInteractionListener {
-        override fun onAdClicked(view: View, type: Int) {
-            Timber.d("onAdClicked")
-        }
-
-        override fun onAdShow(view: View, type: Int) {
-            Timber.d("onAdShow")
-        }
-
-        override fun onRenderFail(view: View, msg: String, code: Int) {
-            Timber.d("onRenderFail .code=$code,message=$msg")
-        }
-
-        override fun onRenderSuccess(view: View, width: Float, height: Float) {
-            Timber.d("onRenderSuccess")
-            val content = CellContentModel()
-            content.isAd = true
-            content.templateAd = view
-            mContentlist.add(adPosition,content)
-            mAdapter.notifyItemInserted(adPosition)
-
-        }
-    }
-```
-
-Please implement `TTNativeExpressAd` 's `void setDislikeCallback(Activity var1, DislikeInteractionCallback var2);` when user click the `dislike` button to get user's feedback. You can remove the ad's view after the user choose one reason why he doesn't like the ad.
-
-```kotlin
-private fun bindDislike(ad: TTNativeExpressAd) {
-    ad.setDislikeCallback(this, object : DislikeInteractionCallback {
-        override fun onSelected(position: Int, value: String) {
-            Timber.d("onSelected")
-            mContentlist.removeAt(adPosition)
-            mAdapter.notifyDataSetChanged()
-        }
-
-        override fun onCancel() {}
-    })
 }
 ```

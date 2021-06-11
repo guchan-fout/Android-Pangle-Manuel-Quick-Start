@@ -52,7 +52,7 @@ allprojects {
 ```gradle
 dependencies {
     ...
-    implementation 'com.pangle.global:ads-sdk:3.5.0.5'
+    implementation 'com.pangle.global:ads-sdk:3.6.0.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     ...
 
@@ -96,16 +96,16 @@ dependencies {
 
 <a name="start/init"></a>
 ## Panlge SDKの初期化
+v3.5.0.0 から非同期初期化メソッドが利用可能になり、
 広告リクエストを送信する前に、`TTAdSdk.init(final Context var0, final TTAdConfig var1, final TTAdSdk.InitCallback var2)`を呼び出してSDKを初期化してください。 `init'は、アプリのライフサイクルごとに1回だけ呼び出す必要があります。これは、アプリの起動時に行うことを**強くお勧め**します。
 
 初期化の結果は`TTAdSdk.InitCallback`から通知されます。
 
 
-
-> :warning: `TTAdSdk.init（）`を呼び出すと、Pangle SDKまたはメディエーションパートナーSDKによって広告がプリロードされる場合があります。欧州経済領域（EEA）のユーザーまたは未成年のユーザーから同意を得る必要がある場合は、Pangle SDKを初期化する前に必ず同意を得るようにしてください。
-
 動画広告に TextureView を使用する場合は、ビルダーで `useTextureView（true）`を設定し、マニフェストに `WAKE_LOCK` 権限を追加してください。
 
+
+> v3.5.0.0より以前のバージョンは同期メソッドの`TTAdSdk.init(Context var0, TTAdConfig var1)`を利用ください。
 
 ```kotlin
 class PangleApplication: Application() {
@@ -136,22 +136,30 @@ class PangleApplication: Application() {
 
     private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
-            // Please use your own appId, this is for demo
-            .appId("5081617")
-            .appName(packageName)
+            // Please use your own appId,
+            .appId("your_app_id")
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
-            // The default setting is SurfaceView.
+            // The default setting is SurfaceView. We strongly recommend to set this to true.
             // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
             .useTextureView(true)
-            // Allow show Notification
-            .allowShowNotify(true)
-            // Whether to support multi-process, true indicates support
-            .supportMultiProcess(false)
             // Fields to indicate whether you are a child or an adult ，0:adult ，1:child
             .coppa(0)
-            //Fields to indicate whether you are protected by GDPR,  the value of GDPR : 0 close GDRP Privacy protection ，1: open GDRP Privacy protection
+            //Fields to indicate whether you are protected by GDPR,  the value of GDPR. 0: close GDRP Privacy protection ，1: open GDRP Privacy protection
             .setGDPR(0)
-
-}
+            .build()
+    }
 ```
+
+
+初期化結果は`TTAdSdk.isInitSuccess()`から確認できます。
+
+```kotlin
+private fun checkInitResult(): Boolean {
+   return TTAdSdk.isInitSuccess()
+}
+
+```
+
+
+> :warning: `TTAdSdk.init（）`を呼び出すと、Pangle SDKまたはメディエーションパートナーSDKによって広告がプリロードされる場合があります。欧州経済領域（EEA）のユーザーまたは１３歳以下未成年のユーザーから同意を得る必要がある場合は、Pangle SDKを初期化する前に必ず同意を得るようにしてください。

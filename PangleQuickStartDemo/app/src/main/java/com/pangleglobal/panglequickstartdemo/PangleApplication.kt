@@ -19,6 +19,11 @@ class PangleApplication : Application() {
 
     private fun initSdk() {
         TTAdSdk.init(this, buildAdConfig(), mInitCallback)
+        //TTAdSdk.init(this.buildAdConfig())
+    }
+
+    private fun checkInitResult(): Boolean {
+       return TTAdSdk.isInitSuccess()
     }
 
     private val mInitCallback: TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
