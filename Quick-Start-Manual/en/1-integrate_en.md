@@ -139,8 +139,6 @@ class PangleApplication: Application() {
             .useTextureView(true)
             // Fields to indicate whether you are a child or an adult ，0:adult ，1:child
             .coppa(0)
-            //Fields to indicate whether you are protected by GDPR,  the value of GDPR. 0: close GDRP Privacy protection ，1: open GDRP Privacy protection
-            .setGDPR(0)
             .build()
     }
 ```
@@ -156,3 +154,10 @@ private fun checkInitResult(): Boolean {
 ```
 
 > :warning: Ads may be preloaded by the Pangle Ads SDK or mediation partner SDKs after initial. If you need to obtain consent from users under age 13, please ensure you do so before initializing the Pangle Ads SDK.
+
+If you wanna change the value of COPPA after initializing Pangle SDK, you can call following method, as shown below:
+
+```kotlin
+TTAdSdk.setCoppa(int CoppaValue);
+
+```

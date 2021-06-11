@@ -145,8 +145,6 @@ class PangleApplication: Application() {
             .useTextureView(true)
             // Fields to indicate whether you are a child or an adult ，0:adult ，1:child
             .coppa(0)
-            //Fields to indicate whether you are protected by GDPR,  the value of GDPR. 0: close GDRP Privacy protection ，1: open GDRP Privacy protection
-            .setGDPR(0)
             .build()
     }
 ```
@@ -161,5 +159,11 @@ private fun checkInitResult(): Boolean {
 
 ```
 
+> :warning: `TTAdSdk.init（）`を呼び出すと、Pangle SDKまたはメディエーションパートナーSDKによって広告がプリロードされる場合があります。１３歳以下未成年のユーザーから同意を得る必要がある場合は、Pangle SDKを初期化する前に必ず同意を得るようにしてください。
 
-> :warning: `TTAdSdk.init（）`を呼び出すと、Pangle SDKまたはメディエーションパートナーSDKによって広告がプリロードされる場合があります。欧州経済領域（EEA）のユーザーまたは１３歳以下未成年のユーザーから同意を得る必要がある場合は、Pangle SDKを初期化する前に必ず同意を得るようにしてください。
+初期化後に COPPA の設定を変えたい場合は下記のメソッドを利用してください。
+
+```kotlin
+TTAdSdk.setCoppa(int CoppaValue);
+
+```

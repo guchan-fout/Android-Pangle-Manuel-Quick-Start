@@ -31,13 +31,13 @@ Pangle管理画面上にて, 対象アプリに属する**Template Banner** 広�
 
 <img src="../pics/template_banner_add.png" alt="drawing" width="200"/>
 
-**300*250をご利用の場合、[600 * 500] を選んでください.**
+**300*250をご利用の場合、300 * 250 (600 * 500 px) を選んでください.**
 
-<img src="../pics/template_banner_set.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_set_300.png" alt="drawing" width="200"/>
 
-**320*50をご利用の場合、[640 * 100] を選んでください.**
+**320*50をご利用の場合、320 * 50 (640 * 100 px) を選んでください.**
 
-<img src="../pics/template320_add.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_set_320.png" alt="drawing" width="200"/>
 
 アプリケーションで、 `slot`を作成し、` setExpressViewAcceptedSize`を使用してサイズを設定し、 `TTAdNative`の` void loadBannerExpressAd（AdSlot var1、@ NonNull TTAdNative.NativeExpressAdListener var2）; `'を使用して広告を読み込みます。
 

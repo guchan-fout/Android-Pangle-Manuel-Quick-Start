@@ -47,8 +47,6 @@ class PangleApplication : Application() {
             .useTextureView(true)
             // Fields to indicate whether you are a child or an adult ，0:adult ，1:child
             .coppa(0)
-            //Fields to indicate whether you are protected by GDPR,  the value of GDPR. 0: close GDRP Privacy protection ，1: open GDRP Privacy protection
-            .setGDPR(0)
             .build()
     }
 }

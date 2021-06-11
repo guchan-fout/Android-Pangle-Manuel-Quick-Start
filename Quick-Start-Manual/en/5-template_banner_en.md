@@ -31,13 +31,13 @@ You will get a **placement ID** for ad's loading.
 
 <img src="../pics/template_banner_add.png" alt="drawing" width="200"/>
 
-**Please select [600 * 500]  for 300*250.**
+**Please select 300 * 250 (600 * 500 px)  for 300*250.**
 
-<img src="../pics/template_banner_set.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_set_300.png" alt="drawing" width="200"/>
 
-**Please select [640 * 100]  for 320*50.**
+**Please select 320 * 50 (640 * 100 px)  for 320*50.**
 
-<img src="../pics/template320_add.png" alt="drawing" width="200"/>
+<img src="../pics/template_banner_set_320.png" alt="drawing" width="200"/>
 
 
 In your application, create a `slot` and use `setExpressViewAcceptedSize` for setting size and use `TTAdNative`'s `void loadBannerExpressAd(AdSlot var1, @NonNull TTAdNative.NativeExpressAdListener var2);`' to load ads.
