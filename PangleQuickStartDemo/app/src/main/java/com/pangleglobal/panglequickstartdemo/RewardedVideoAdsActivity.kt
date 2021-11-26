@@ -66,8 +66,16 @@ class RewardedVideoAdsActivity : AppCompatActivity() {
             mIsCached = false
             mRewardVideoAd?.setRewardAdInteractionListener(object :
                 TTRewardVideoAd.RewardAdInteractionListener {
-                override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
-                    Timber.d("reward video onRewardVerify")
+
+
+                override fun onRewardVerify(
+                    p0: Boolean,
+                    p1: Int,
+                    p2: String?,
+                    p3: Int,
+                    p4: String?
+                ) {
+                    TODO("Not yet implemented")
                 }
 
                 override fun onSkippedVideo() {

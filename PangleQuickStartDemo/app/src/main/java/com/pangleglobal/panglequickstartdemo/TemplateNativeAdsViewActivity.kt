@@ -59,7 +59,7 @@ class TemplateNativeAdsViewActivity : AppCompatActivity() {
             .setAdCount(1)
             .setExpressViewAcceptedSize(300F, 250F)
             .build()
-        mTTAdNative.loadNativeExpressAd(adSlot, mTTNativeExpressAdListener)
+        //mTTAdNative.loadNativeExpressAd(adSlot, mTTNativeExpressAdListener)
     }
 
     private val mTTNativeExpressAdListener: NativeExpressAdListener =

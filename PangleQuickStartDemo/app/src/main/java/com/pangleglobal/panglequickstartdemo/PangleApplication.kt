@@ -42,6 +42,7 @@ class PangleApplication : Application() {
             .appId("5081617")
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
             .debug(BuildConfig.DEBUG)
+            .debugLog(1)
             // The default setting is SurfaceView. We strongly recommend to set this to true.
             // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
             .useTextureView(true)
